@@ -4,9 +4,8 @@
   "description": "A foundation for scalable desktop apps",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Chuanyang Gong",
+    "email": "cy_gong@foxmail.com"
   },
   "main": "./dist/main/main.js",
   "scripts": {
