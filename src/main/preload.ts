@@ -20,6 +20,7 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  openAnotherWindow: () => ipcRenderer.send('openAnotherWindow'),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

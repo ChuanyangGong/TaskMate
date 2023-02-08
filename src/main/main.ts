@@ -88,7 +88,7 @@ import { initialDBManager } from './database/DatabaseManager';
       },
     });
 
-    mainWindow.loadURL(resolveHtmlPath('index.html'));
+    mainWindow.loadURL(resolveHtmlPath('dashboard.html'));
 
     mainWindow.on('ready-to-show', () => {
       if (!mainWindow) {
@@ -116,8 +116,54 @@ import { initialDBManager } from './database/DatabaseManager';
 
     // Remove this if your app does not use auto updates
     // eslint-disable-next-line
-    new AppUpdater();
+    // new AppUpdater();
   };
+
+  ipcMain.on('openAnotherWindow', async (event, arg) => {
+    function createNewWindow() {
+      const RESOURCES_PATH = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets')
+        : path.join(__dirname, '../../assets');
+
+      const getAssetPath = (...paths: string[]): string => {
+        return path.join(RESOURCES_PATH, ...paths);
+      };
+
+      let newWindow: BrowserWindow | null = new BrowserWindow({
+        show: false,
+        width: 1024,
+        height: 728,
+        icon: getAssetPath('icon.png'),
+        webPreferences: {
+          preload: app.isPackaged
+            ? path.join(__dirname, 'preload.js')
+            : path.join(__dirname, '../../.erb/dll/preload.js'),
+        },
+      });
+
+      newWindow.loadURL(resolveHtmlPath('recorder.html'));
+
+      newWindow.on('ready-to-show', () => {
+        if (!newWindow) {
+          throw new Error('"newWindow" is not defined');
+        }
+        if (process.env.START_MINIMIZED) {
+          newWindow.minimize();
+        } else {
+          newWindow.show();
+        }
+      });
+
+      newWindow.on('closed', () => {
+        newWindow = null;
+      });
+    }
+    try {
+      createNewWindow();
+    } catch (e) {
+      console.log({ e });
+    }
+  });
 
   /**
    * Add event listeners...
