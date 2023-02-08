@@ -20,7 +20,7 @@ import { initialDBManager } from './database/DatabaseManager';
 (async () => {
   const cfgManager = getConfigManager();
 
-  initialDBManager(cfgManager.config?.userConfig.databasePath || '');
+  await initialDBManager(cfgManager.config?.userConfig.databasePath || '');
 
   class AppUpdater {
     constructor() {
