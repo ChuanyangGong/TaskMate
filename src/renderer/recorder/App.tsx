@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import '../App.css';
+import '../App.scss';
 
 const Hello = () => {
   return <div>recorder adas</div>;

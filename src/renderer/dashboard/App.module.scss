@@ -1,0 +1,17 @@
+.framework {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  .dashboardWrap {
+    position: relative;
+    height: calc(100% - 14px);
+    width: calc(100% - 14px);
+    border-radius: 2px;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    overflow: hidden;
+  }
+}

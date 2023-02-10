@@ -19,7 +19,11 @@ export const createDashboardWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
+    minWidth: 1024,
+    minHeight: 700,
     icon: getAssetPath('icon.png'),
+    frame: false,
+    transparent: true,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -43,19 +47,6 @@ export const createDashboardWindow = async () => {
   dashboardWindow.on('closed', () => {
     dashboardWindow = null;
   });
-
-  const menuBuilder = new MenuBuilder(dashboardWindow);
-  menuBuilder.buildMenu();
-
-  // Open urls in the user's browser
-  dashboardWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: 'deny' };
-  });
-
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  // new AppUpdater();
 };
 
 ipcMain.on('openAnotherWindow', async (event, arg) => {

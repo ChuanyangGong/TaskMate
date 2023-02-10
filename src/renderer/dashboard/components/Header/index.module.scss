@@ -1,0 +1,46 @@
+.headerWrap {
+  position: absolute;
+  display: flex;
+  height: 30px;
+  width: 100%;
+
+  .dragArea {
+    flex: auto;
+  }
+
+  .canDrag {
+    -webkit-app-region: drag;
+  }
+
+  .buttonArea {
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 46px;
+    user-select: none;
+    color: #000;
+    font-weight: 700;
+  }
+
+  .buttonArea:hover {
+    background-color: rgb(219, 219, 219);
+    transition: background-color 0.15s;
+  }
+
+  .buttonArea:active {
+    background-color: rgb(194, 194, 194);
+    transition: background-color 0.05s;
+  }
+
+  .closeArea:hover {
+    background-color: rgb(232, 17, 35);
+    transition: background-color 0.05s;
+    color: #fff;
+  }
+
+  .closeArea:active {
+    background-color: rgba(232, 17, 35, 0.7);
+    transition: background-color 0.05s;
+  }
+}

@@ -11,6 +11,7 @@
 import { app } from 'electron';
 import { getConfigManager } from './config/ConfigManager';
 import { initialDBManager } from './database/DatabaseManager';
+import initialCommonHandler from './windows/common';
 import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
 
 // 初始化项目
@@ -23,6 +24,9 @@ import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
   if (cfgManager.config?.isDev) {
     require('electron-debug')();
   }
+
+  // 初始化事件处理
+  await initialCommonHandler();
 
   // 定义程序事件处理
   app.on('window-all-closed', () => {
