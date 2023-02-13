@@ -1,0 +1,62 @@
+.menuWrap {
+  flex: none;
+  height: 100%;
+  width: 226px;
+  background-color: #fff;
+  padding: 30px 12px 20px;
+  border-right: 1px solid rgba(193, 188, 188, 0.2);
+  user-select: none;
+
+  .commonWrap {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    color: #191919;
+  }
+
+  .commonWrap:hover {
+    background: #F5F8FF;
+  }
+
+  .commonSelected {
+    background: #ECF1FF!important;
+  }
+
+  $paddingLeft: 15px;
+  .defaultWrap {
+    height: 38px;
+    padding: 0 $paddingLeft;
+
+    .title {
+      margin-left: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .filterRoot {
+    display: flex;
+    height: 26px;
+    margin: 2px 0;
+    font-size: 12px;
+    color: #757575;
+
+    .iconWrap {
+      display: flex;
+      justify-content: center;
+      flex: none;
+      width: $paddingLeft;
+      color: #545454;
+    }
+
+    .iconWrap:hover {
+      font-weight: 700;
+    }
+
+    .expand {
+      transform: rotate(90deg);
+      transition: all 0.5;
+    }
+  }
+}

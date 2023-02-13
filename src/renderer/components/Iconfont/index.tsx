@@ -4,13 +4,14 @@ interface IconProps {
   iconName: string;
   className?: string;
   size?: number;
+  iconColor?: string;
 }
 
 const Iconfont = (props: IconProps): ReactElement => {
-  const { iconName, className, size } = props;
+  const { iconName, className, size: fontSize, iconColor: color } = props;
   return (
     <span className={className}>
-      <i className={`iconfont ${iconName}`} style={{ fontSize: size }} />
+      <i className={`iconfont ${iconName}`} style={{ fontSize, color }} />
     </span>
   );
 };
@@ -18,6 +19,7 @@ const Iconfont = (props: IconProps): ReactElement => {
 Iconfont.defaultProps = {
   className: undefined,
   size: 16,
+  iconColor: '',
 };
 
 export default Iconfont;

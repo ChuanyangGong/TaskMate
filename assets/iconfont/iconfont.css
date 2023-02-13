@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3888423 */
-  src: url('~/../assets/iconfont/iconfont.woff2?t=1675943905758') format('woff2'),
-       url('~/../assets/iconfont/iconfont.woff?t=1675943905758') format('woff'),
-       url('~/../assets/iconfont/iconfont.ttf?t=1675943905758') format('truetype');
+  src: url('iconfont.woff2?t=1676291779351') format('woff2'),
+       url('iconfont.woff?t=1676291779351') format('woff'),
+       url('iconfont.ttf?t=1676291779351') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,50 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-right:before {
+  content: "\e743";
+}
+
+.icon-arrow-left:before {
+  content: "\e744";
+}
+
+.icon-arrow-up:before {
+  content: "\e745";
+}
+
+.icon-arrow-down:before {
+  content: "\e7b2";
+}
+
+.icon-archive:before {
+  content: "\e719";
+}
+
+.icon-today:before {
+  content: "\e8ca";
+}
+
+.icon-bx-calendar-week:before {
+  content: "\e62d";
+}
+
+.icon-data06:before {
+  content: "\e67b";
+}
+
+.icon-sun:before {
+  content: "\e668";
+}
+
+.icon-data:before {
+  content: "\e623";
+}
+
+.icon-todo:before {
+  content: "\e6cb";
 }
 
 .icon-24gl-minus:before {

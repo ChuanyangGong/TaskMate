@@ -18,9 +18,9 @@ export const createDashboardWindow = async () => {
   dashboardWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728,
+    height: 600,
     minWidth: 1024,
-    minHeight: 700,
+    minHeight: 600,
     icon: getAssetPath('icon.png'),
     frame: false,
     transparent: true,
