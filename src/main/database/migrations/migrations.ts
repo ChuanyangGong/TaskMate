@@ -1,4 +1,4 @@
-import CreateUsersTable from './230114_212601_create_users_table';
-import CreateAddressTable from './230114_215001_create_address_table';
+import CreateCategoriesTable from './230216_201805_create_categories_table';
+import CreateCategoryAliasesTable from './230216_203005_create_category_aliases_table';
 
-export default [CreateUsersTable, CreateAddressTable];
+export default [CreateCategoriesTable, CreateCategoryAliasesTable];

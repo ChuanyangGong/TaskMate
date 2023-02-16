@@ -5,7 +5,7 @@ export interface MenuItem {
   show: boolean;
 }
 
-export interface DefaultItem {
+export interface DefaultItemType {
   icon: string;
   title: string;
   id: string;

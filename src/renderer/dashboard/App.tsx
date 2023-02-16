@@ -1,11 +1,6 @@
 import { Button } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import {
-  DefaultItem,
-  MenuItem,
-} from 'typings/renderer/dashboard/components/App';
-import icon from '../../../assets/icon.svg';
+import { DefaultItemType, MenuItem } from 'typings/renderer/dashboard/App';
 import '../App.scss';
 import styles from './App.module.scss';
 import Header from './components/Header';
@@ -34,7 +29,7 @@ const buttonList: MenuItem[] = [
   },
 ];
 
-const defultSelectionList: DefaultItem[] = [
+const defultSelectionList: DefaultItemType[] = [
   {
     icon: 'archive',
     title: '所有',
@@ -70,6 +65,9 @@ export default function App() {
     `default|${defultSelectionList[0].id}`
   );
 
+  // 当前悬浮的菜单
+  const [hoveredId, setHoveredId] = useState('');
+
   return (
     <div className={styles.framework}>
       <div className={styles.dashboardWrap} style={dashboardStyle}>
@@ -85,6 +83,8 @@ export default function App() {
             defaultList={defultSelectionList}
             selectedSubId={selectedSubId}
             setSelectedSubId={setSelectedSubId}
+            hoveredId={hoveredId}
+            setHoveredId={setHoveredId}
           />
           <TaskList />
         </div>

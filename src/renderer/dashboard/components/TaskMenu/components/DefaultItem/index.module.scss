@@ -1,0 +1,27 @@
+.commonWrap {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  color: #191919;
+}
+
+.commonWrap:hover {
+  background: #F5F8FF;
+}
+
+.commonSelected {
+  background: #ECF1FF!important;
+}
+
+$paddingLeft: 15px;
+.defaultWrap {
+  height: 38px;
+  padding: 0 $paddingLeft;
+
+  .title {
+    margin-left: 8px;
+    font-size: 14px;
+  }
+}

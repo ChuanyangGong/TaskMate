@@ -2,37 +2,50 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 import Divider from 'renderer/components/Divider';
-import Iconfont from 'renderer/components/Iconfont';
-import { DefaultItem } from 'typings/renderer/dashboard/components/App';
+import { DefaultItemType } from 'typings/renderer/dashboard/App';
+import { FilterItemType } from 'typings/renderer/dashboard/components/TaskMenu';
+import DefaultItem from './components/DefaultItem';
+import FilterItem from './components/FilterItem';
 import styles from './index.module.scss';
 
 interface TaskMenuProps {
-  defaultList: DefaultItem[];
+  defaultList: DefaultItemType[];
   selectedSubId: string;
   setSelectedSubId: Dispatch<SetStateAction<string>>;
+  hoveredId: string;
+  setHoveredId: Dispatch<SetStateAction<string>>;
 }
 
-const defaultFilterList = [
+const defaultFilterList: FilterItemType[] = [
   {
     name: '分类',
     id: 'category',
-    hint: '',
+    hint: '对任务进行划分',
     expand: true,
+    children: [],
   },
   {
     name: '标签',
     id: 'tag',
-    hint: '',
+    hint: '以标签的形式对任务进行进一步划分',
     expand: false,
+    children: [],
   },
 ];
 
 export default function TaskMenu(props: TaskMenuProps) {
-  const { defaultList, selectedSubId, setSelectedSubId } = props;
+  const {
+    defaultList,
+    selectedSubId,
+    setSelectedSubId,
+    hoveredId,
+    setHoveredId,
+  } = props;
 
   // 选择过滤条件
   const onSelected = useCallback(
@@ -42,27 +55,55 @@ export default function TaskMenu(props: TaskMenuProps) {
     [setSelectedSubId]
   );
 
+  // hover
+  const onEnter = useCallback(
+    (type: string, id: string) => {
+      setHoveredId(`${type}|${id}`);
+    },
+    [setHoveredId]
+  );
+
+  const onLeave = useCallback(() => {
+    setHoveredId('');
+  }, [setHoveredId]);
+
   // 过滤器
   const [filterList, setFilterList] = useState(defaultFilterList);
+
+  // 更新下拉列表数据
+  const getFilterListChildren = useCallback(
+    async (type = 'all') => {
+      if (['category', 'all'].includes(type)) {
+        const data = await window.electron.dashboard.getCategoryList();
+        const newFilterList = filterList.map((item) => {
+          if (item.id === 'category') {
+            item.children = data;
+          }
+          return item;
+        });
+        setFilterList(newFilterList);
+      }
+
+      // if (['tag', 'all'].includes(type)) {
+      // }
+    },
+    [filterList]
+  );
+
+  useEffect(() => {
+    getFilterListChildren();
+  }, []);
 
   // 渲染默认选项
   const DefaultItems = useMemo(() => {
     return defaultList.map((item) => {
       return (
-        <div
-          className={`${styles.commonWrap} ${styles.defaultWrap} ${
-            `default|${item.id}` === selectedSubId ? styles.commonSelected : ''
-          }`}
+        <DefaultItem
           key={item.id}
-          onClick={() => onSelected('default', item.id)}
-        >
-          <Iconfont
-            iconName={`icon-${item.icon}`}
-            size={18}
-            iconColor="#989BA3"
-          />
-          <span className={styles.title}>{item.title}</span>
-        </div>
+          itemData={item}
+          selectedSubId={selectedSubId}
+          onSelected={onSelected}
+        />
       );
     });
   }, [defaultList, onSelected, selectedSubId]);
@@ -85,21 +126,27 @@ export default function TaskMenu(props: TaskMenuProps) {
   const FilterItems = useMemo(() => {
     return filterList.map((item) => {
       return (
-        <div
+        <FilterItem
           key={item.id}
-          className={`${styles.commonWrap} ${styles.defaultWrap}} ${styles.filterRoot}`}
-          onClick={() => onChangeExpand(item.id)}
-        >
-          <div
-            className={`${styles.iconWrap} ${item.expand ? styles.expand : ''}`}
-          >
-            <Iconfont iconName="icon-arrow-right" size={12} />
-          </div>
-          {item.name}
-        </div>
+          itemData={item}
+          onChangeExpand={onChangeExpand}
+          selectedSubId={selectedSubId}
+          onSelected={onSelected}
+          hoveredId={hoveredId}
+          onEnter={onEnter}
+          onLeave={onLeave}
+        />
       );
     });
-  }, [filterList, onChangeExpand]);
+  }, [
+    filterList,
+    hoveredId,
+    onChangeExpand,
+    onEnter,
+    onLeave,
+    onSelected,
+    selectedSubId,
+  ]);
 
   return (
     <div className={styles.menuWrap}>

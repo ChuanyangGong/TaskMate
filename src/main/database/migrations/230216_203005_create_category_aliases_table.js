@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize';
 
 export default {
-  name: '230114_215001_create_roles_table.js',
+  name: '230216_203005_create_category_aliases_table.js',
   async up({ context: queryInterface }) {
-    await queryInterface.createTable('Roles', {
+    await queryInterface.createTable('CategoryAliases', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -24,6 +24,12 @@ export default {
       deletedAt: {
         type: Sequelize.DATE,
       },
+      categoryId: {
+        type: Sequelize.INTEGER,
+      },
     });
+  },
+  async down({ context: queryInterface }) {
+    await queryInterface.dropTable('CategoryAliases');
   },
 };

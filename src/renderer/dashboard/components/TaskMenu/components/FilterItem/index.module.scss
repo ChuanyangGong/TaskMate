@@ -1,0 +1,104 @@
+.itemWrap {
+  $borderRadius: 5px;
+  margin: 2px 0 5px;
+
+  $paddingLeft: 15px;
+  $paddingRight: 8px;
+  .commonWrap {
+    display: flex;
+    align-items: center;
+    border-radius: $borderRadius;
+    cursor: pointer;
+    overflow: hidden;
+    color: #191919;
+
+    .iconWrap {
+      flex: none;
+      display: flex;
+      justify-content: center;
+      width: $paddingLeft;
+      color: #545454;
+    }
+
+    .title {
+      flex: auto;
+
+      overflow:hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .rightRegion {
+      flex: none;
+      width: 20px;
+      color: #757575;
+      text-align: right;
+      font-size: 11px;
+    }
+  }
+
+  .commonWrap:hover {
+    background: #F5F8FF;
+  }
+
+  .commonSelected {
+    background: #ECF1FF!important;
+  }
+
+  .filterRoot {
+    display: flex;
+    height: 26px;
+    font-size: 12px;
+    color: #757575;
+    padding-right: $paddingRight;
+
+    .iconWrap:hover {
+      font-weight: 700;
+    }
+
+    .expand {
+      transform: rotate(90deg);
+      transition: all 0.5;
+    }
+
+    .rightRegion {
+      height: 21px;
+      width: 21px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+
+    .rightRegion:hover {
+      background-color: #eee;
+    }
+  }
+
+  .emptyHint {
+    font-size: 12px;
+    color: #979797;
+    padding: 5px 7px;
+    margin-left: calc($paddingLeft - 1px);
+    border-radius: $borderRadius;
+
+    background-color: #f7f7f7;
+  }
+
+  .childWrap {
+    height: 38px;
+    padding: 0 $paddingRight 0 $paddingLeft;
+    overflow: hidden;
+
+    .title {
+      margin-left: 5px;
+      font-size: 13px;
+    }
+
+    .rightRegion {
+
+      .ellipsis:hover {
+        font-weight: 700;
+        color: #313131;
+      }
+    }
+  }
+}

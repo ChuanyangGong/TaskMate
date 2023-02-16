@@ -1,12 +1,12 @@
 .headerWrap {
   position: absolute;
   display: flex;
-  height: 30px;
+  height: 22px;
   width: 100%;
 
   .dragArea {
     flex: auto;
-    height: 20px;
+    height: 22px;
   }
 
   .canDrag {
@@ -18,7 +18,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 46px;
+    width: 38px;
     user-select: none;
     color: #000;
     font-weight: 700;

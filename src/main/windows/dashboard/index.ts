@@ -1,5 +1,7 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
+import { Op, Sequelize } from 'sequelize';
+import { Category } from '../../database/models/Category';
 import { resolveHtmlPath } from '../../util';
 import MenuBuilder from '../../menu';
 import { createRecorderWindow } from '../recorder';
@@ -55,6 +57,19 @@ ipcMain.on('openAnotherWindow', async (event, arg) => {
   } catch (e) {
     console.log({ e });
   }
+});
+
+// 获取分类列表
+ipcMain.handle('dashboard:getCategoryList', async () => {
+  const categoryList = await Category.findAll({
+    where: {
+      finishedAt: {
+        [Op.is]: null,
+      },
+    },
+    order: Sequelize.col('order'),
+  });
+  return categoryList.map((item) => item.toJSON());
 });
 
 export const getDashboardWin = () => {

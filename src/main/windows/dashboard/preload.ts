@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
 
 export default {
-  empty: () => {},
+  getCategoryList: () => ipcRenderer.invoke('dashboard:getCategoryList'),
 };

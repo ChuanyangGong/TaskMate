@@ -17,7 +17,7 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   const { winIsMaximum, setWinIsMaximum } = props;
-  const fontSize = 13;
+  const fontSize = 11;
 
   const onRevertWinSize = useCallback(async () => {
     const newWinIsMaximum = await window.electron.common.revertWindowSize(

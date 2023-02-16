@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3888423 */
-  src: url('iconfont.woff2?t=1676291779351') format('woff2'),
-       url('iconfont.woff?t=1676291779351') format('woff'),
-       url('iconfont.ttf?t=1676291779351') format('truetype');
+  src: url('iconfont.woff2?t=1676465421956') format('woff2'),
+       url('iconfont.woff?t=1676465421956') format('woff'),
+       url('iconfont.ttf?t=1676465421956') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-view-list:before {
+  content: "\e60a";
+}
+
+.icon-code:before {
+  content: "\e6f2";
+}
+
+.icon-editor:before {
+  content: "\e6f6";
+}
+
+.icon-ellipsis:before {
+  content: "\e74f";
+}
+
+.icon-add-select:before {
+  content: "\e7b0";
+}
+
+.icon-sami-select:before {
+  content: "\e7b1";
+}
+
+.icon-search:before {
+  content: "\e7b3";
+}
+
+.icon-square:before {
+  content: "\e7d1";
+}
+
+.icon-shouqi:before {
+  content: "\e7d3";
+}
+
+.icon-zhankai:before {
+  content: "\e7d4";
 }
 
 .icon-arrow-right:before {
