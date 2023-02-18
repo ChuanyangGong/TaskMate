@@ -101,4 +101,15 @@
       }
     }
   }
+
+}
+
+.formWrap {
+  margin: 20px 0;
+
+  :global {
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  }
 }

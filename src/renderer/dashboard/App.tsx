@@ -1,7 +1,8 @@
-import { Button } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import { DefaultItemType, MenuItem } from 'typings/renderer/dashboard/App';
 import '../App.scss';
+import zhCN from 'antd/locale/zh_CN';
 import styles from './App.module.scss';
 import Header from './components/Header';
 import MainMenu from './components/MainMenu';
@@ -69,26 +70,31 @@ export default function App() {
   const [hoveredId, setHoveredId] = useState('');
 
   return (
-    <div className={styles.framework}>
-      <div className={styles.dashboardWrap} style={dashboardStyle}>
-        <Header winIsMaximum={winIsMaximum} setWinIsMaximum={setWinIsMaximum} />
-        {/* dashboard content */}
-        <div className={styles.dashboardContentWrap}>
-          <MainMenu
-            buttonList={buttonList}
-            selectedTitle={selectedTitle}
-            setSelectedTitle={setSelectedTitle}
+    <ConfigProvider locale={zhCN}>
+      <div className={styles.framework}>
+        <div className={styles.dashboardWrap} style={dashboardStyle}>
+          <Header
+            winIsMaximum={winIsMaximum}
+            setWinIsMaximum={setWinIsMaximum}
           />
-          <TaskMenu
-            defaultList={defultSelectionList}
-            selectedSubId={selectedSubId}
-            setSelectedSubId={setSelectedSubId}
-            hoveredId={hoveredId}
-            setHoveredId={setHoveredId}
-          />
-          <TaskList />
+          {/* dashboard content */}
+          <div className={styles.dashboardContentWrap}>
+            <MainMenu
+              buttonList={buttonList}
+              selectedTitle={selectedTitle}
+              setSelectedTitle={setSelectedTitle}
+            />
+            <TaskMenu
+              defaultList={defultSelectionList}
+              selectedSubId={selectedSubId}
+              setSelectedSubId={setSelectedSubId}
+              hoveredId={hoveredId}
+              setHoveredId={setHoveredId}
+            />
+            <TaskList />
+          </div>
         </div>
       </div>
-    </div>
+    </ConfigProvider>
   );
 }

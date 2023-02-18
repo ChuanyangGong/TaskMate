@@ -135,6 +135,7 @@ export default function TaskMenu(props: TaskMenuProps) {
           hoveredId={hoveredId}
           onEnter={onEnter}
           onLeave={onLeave}
+          invokeUpdate={getFilterListChildren}
         />
       );
     });

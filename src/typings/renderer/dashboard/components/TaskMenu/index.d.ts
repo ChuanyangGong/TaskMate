@@ -11,3 +11,10 @@ export interface FilterItemChildType {
   name: string;
   order: number;
 }
+
+export interface FilterItemFormDataType {
+  id?: number;
+  name: string;
+  order?: number;
+  shortNames?: string[];
+}

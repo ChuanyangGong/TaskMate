@@ -1,9 +1,10 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
 export class Category extends Model {
+  declare id: number;
   declare name: string;
-
   declare finishedAt: Date;
+  declare order: number;
 }
 
 export function initCategory(sequelize: Sequelize) {
@@ -15,6 +16,9 @@ export function initCategory(sequelize: Sequelize) {
       finishedAt: {
         type: DataTypes.DATE,
       },
+      order: {
+        type: DataTypes.INTEGER,
+      }
     },
     { sequelize, paranoid: true }
   );
