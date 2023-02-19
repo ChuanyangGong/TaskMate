@@ -23,7 +23,10 @@ export default {
       },
       deletedAt: {
         type: Sequelize.DATE,
-      }
+      },
+      tagId: {
+        type: Sequelize.INTEGER,
+      },
     });
   },
   async down({ context: queryInterface }) {

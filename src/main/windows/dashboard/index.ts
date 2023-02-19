@@ -8,8 +8,13 @@ import { createRecorderWindow } from '../recorder';
 import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/TaskMenu';
 import { CategoryAlias } from '../../database/models/CategoryAlias';
 import { Tag } from '../../database/models/Tag';
+import { TagAlias } from '../../database/models/TagAlias';
 
 let dashboardWindow: BrowserWindow | null = null;
+
+function isCategory(type: string) {
+  return type === 'category';
+}
 
 export const createDashboardWindow = async () => {
   const RESOURCES_PATH = app.isPackaged
@@ -81,7 +86,7 @@ ipcMain.handle('dashboard:getFilterListChildren', async () => {
 
 // 获取某一个分类或标签的详情
 ipcMain.handle('dashboard:getItemDetailByType', async (event, type: string, id: number) => {
-  if (type === 'category') {
+  if (isCategory(type)) {
     const category = (await Category.findByPk(id))?.toJSON();
     // 查找不到
     if (category === null) {
@@ -97,13 +102,26 @@ ipcMain.handle('dashboard:getItemDetailByType', async (event, type: string, id: 
     category.children = shortNames.map((item) => item.toJSON().name);
     return category;
   } else {
-    return null;
+    const tag = (await Tag.findByPk(id))?.toJSON();
+    // 查找不到
+    if (tag === null) {
+      return null;
+    }
+    const shortNames = await TagAlias.findAll({
+      where: {
+        tagId: {
+          [Op.eq]: tag.id,
+        },
+      },
+    });
+    tag.children = shortNames.map((item) => item.toJSON().name);
+    return tag;
   }
 });
 
 // 添加或更新分类、标签
-ipcMain.handle('dashboard:saveOrNewItemByType', async (event, type: string, data: FilterItemFormDataType) => {
-  if (type === 'category') {
+ipcMain.handle('dashboard:saveOrNewItemByType', async (_, type: string, data: FilterItemFormDataType) => {
+  if (isCategory(type)) {
     // 更新分类
     let newOrder: number = await Category.max('order');
     newOrder += 100;
@@ -140,7 +158,59 @@ ipcMain.handle('dashboard:saveOrNewItemByType', async (event, type: string, data
         },
       }
     })
-  } else {}
+  } else {
+    let newOrder: number = await Tag.max('order');
+    newOrder += 100;
+    let tag: Tag | null;
+    if (data.id === 0) {
+      tag = await Tag.create({
+        name: data.name,
+        order: newOrder,
+      })
+    } else {
+      tag = await Tag.findByPk(data.id);
+      if (tag === null) {
+        return false;
+      }
+      tag.name = data.name;
+      tag.order = data.order ?? tag.order;
+      await tag.save();
+    }
+    // 更新别名
+    data.shortNames?.forEach(async (name) => {
+      await TagAlias.findOrCreate({
+        where: { name },
+        defaults: {
+          name,
+          tagId: tag?.id,
+        }
+      })
+    });
+    await TagAlias.destroy({
+      where: {
+        tagId: tag?.id,
+        name: {
+          [Op.notIn]: data.shortNames ?? [],
+        },
+      }
+    })
+  }
+  return true;
+});
+
+// 删除分类、标签
+ipcMain.handle('dashboard:deleteCategoryOrTagItemByType', async (_, type: string, id: number) => {
+  if (id === -1) {
+    return false;
+  }
+  if(type === 'category') {
+    // 删除别名
+    await CategoryAlias.destroy({ where: { categoryId: id } });
+    await Category.destroy({ where: { id }});
+  } else {
+    await TagAlias.destroy({ where: { tagId: id } });
+    await Tag.destroy({ where: { id }});
+  }
   return true;
 });
 

@@ -5,4 +5,5 @@ export default {
   getFilterListChildren: () => ipcRenderer.invoke('dashboard:getFilterListChildren'),
   getItemDetailByType: (type: string, id: number) => ipcRenderer.invoke('dashboard:getItemDetailByType', type, id),
   saveOrNewItemByType: (type: string, data: FilterItemFormDataType) => ipcRenderer.invoke('dashboard:saveOrNewItemByType', type, data),
+  deleteCategoryOrTagItemByType: (type: string, id: number) => ipcRenderer.invoke('dashboard:deleteCategoryOrTagItemByType', type, id),
 };
