@@ -7,6 +7,7 @@ import MenuBuilder from '../../menu';
 import { createRecorderWindow } from '../recorder';
 import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/TaskMenu';
 import { CategoryAlias } from '../../database/models/CategoryAlias';
+import { Tag } from '../../database/models/Tag';
 
 let dashboardWindow: BrowserWindow | null = null;
 
@@ -61,17 +62,21 @@ ipcMain.on('openAnotherWindow', async (event, arg) => {
   }
 });
 
-// 获取分类列表
-ipcMain.handle('dashboard:getCategoryList', async () => {
-  const categoryList = await Category.findAll({
-    where: {
-      finishedAt: {
-        [Op.is]: null,
-      },
-    },
-    order: Sequelize.col('order'),
+// 获取分类 或 标签列表
+ipcMain.handle('dashboard:getFilterListChildren', async () => {
+  const searchObj = [Category, Tag];
+  const lists = searchObj.map((obj) => {
+    return obj.findAll({
+      where: { finishedAt: { [Op.is]: null } },
+      order: Sequelize.col('order'),
+    });
   });
-  return categoryList.map((item) => item.toJSON());
+  const promiseLise = Promise.all(lists);
+  const res = await promiseLise;
+  return {
+    category: res[0].map((item) => item.toJSON()),
+    tag: res[1].map((item) => item.toJSON()),
+  };
 });
 
 // 获取某一个分类或标签的详情

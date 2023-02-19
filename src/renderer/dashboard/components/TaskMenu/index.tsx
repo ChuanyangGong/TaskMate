@@ -72,20 +72,13 @@ export default function TaskMenu(props: TaskMenuProps) {
 
   // 更新下拉列表数据
   const getFilterListChildren = useCallback(
-    async (type = 'all') => {
-      if (['category', 'all'].includes(type)) {
-        const data = await window.electron.dashboard.getCategoryList();
-        const newFilterList = filterList.map((item) => {
-          if (item.id === 'category') {
-            item.children = data;
-          }
-          return item;
-        });
-        setFilterList(newFilterList);
-      }
-
-      // if (['tag', 'all'].includes(type)) {
-      // }
+    async () => {
+      const data = await window.electron.dashboard.getFilterListChildren();
+      const newFilterList = filterList.map((item) => {
+        item.children = data[item.id];
+        return item;
+      })
+      setFilterList(newFilterList);
     },
     [filterList]
   );
