@@ -1,17 +1,17 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
-export class CategoryAlias extends Model {
+export class TagAlias extends Model {
   declare name: string;
-  declare categoryId: number;
+  declare tagId: number;
 }
 
-export function initCategoryAlias(sequelize: Sequelize) {
-  CategoryAlias.init(
+export function initTagAlias(sequelize: Sequelize) {
+  TagAlias.init(
     {
       name: {
         type: DataTypes.STRING,
       },
-      categoryId: {
+      tagId: {
         type: DataTypes.INTEGER,
       },
     },
