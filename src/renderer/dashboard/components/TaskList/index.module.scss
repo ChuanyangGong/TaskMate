@@ -1,7 +1,10 @@
 .menuWrap {
   flex: auto;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: #fff;
+  // min-width: 492px;
 
   padding: 22px 0 10px;
 }

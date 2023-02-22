@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import ListCommonFilter from './components/ListCommonFilter';
 import ListHeader from './components/ListHeader';
+import ListItems from './components/ListItems';
 import styles from './index.module.scss';
 
 
@@ -23,6 +25,8 @@ export default function TaskList(props: TaskListProps) {
         setHideTaskMenu={setHideTaskMenu}
         selectedSubId={selectedSubId}
       />
+      <ListCommonFilter />
+      <ListItems />
     </div>
   );
 }
