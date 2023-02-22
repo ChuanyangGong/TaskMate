@@ -15,10 +15,12 @@ import styles from './index.module.scss';
 
 interface TaskMenuProps {
   defaultList: DefaultItemType[];
-  selectedSubId: string;
-  setSelectedSubId: Dispatch<SetStateAction<string>>;
+  selectedSubId: { id: string; title: string; };
+  setSelectedSubId: Dispatch<SetStateAction<{ id: string; title: string; }>>;
   hoveredId: string;
   setHoveredId: Dispatch<SetStateAction<string>>;
+  hideTaskMenu: boolean;
+  setHideTaskMenu: Dispatch<SetStateAction<boolean>>;
 }
 
 const defaultFilterList: FilterItemType[] = [
@@ -45,12 +47,17 @@ export default function TaskMenu(props: TaskMenuProps) {
     setSelectedSubId,
     hoveredId,
     setHoveredId,
+    hideTaskMenu,
+    setHideTaskMenu,
   } = props;
 
   // 选择过滤条件
   const onSelected = useCallback(
-    (type: string, id: string) => {
-      setSelectedSubId(`${type}|${id}`);
+    (type: string, id: string, title: string) => {
+      setSelectedSubId({
+        id: `${type}|${id}`,
+        title
+      });
     },
     [setSelectedSubId]
   );
@@ -143,7 +150,7 @@ export default function TaskMenu(props: TaskMenuProps) {
   ]);
 
   return (
-    <div className={styles.menuWrap}>
+    <div className={styles.menuWrap} style={hideTaskMenu ? {width: 0, padding: 0, border: 'none'} : {}}>
       {/* 默认框 */}
       {DefaultItems}
       <Divider top={8} />

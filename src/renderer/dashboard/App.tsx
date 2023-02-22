@@ -62,12 +62,17 @@ export default function App() {
   const [selectedTitle, setSelectedTitle] = useState('');
 
   // 当前选中的子菜单
-  const [selectedSubId, setSelectedSubId] = useState(
-    `default|${defultSelectionList[0].id}`
+  const [selectedSubId, setSelectedSubId] = useState({
+    id: `default|${defultSelectionList[0].id}`,
+    title: '所有',
+  }
   );
 
   // 当前悬浮的菜单
   const [hoveredId, setHoveredId] = useState('');
+
+  // Task menu 收缩状态
+  const [hideTaskMenu, setHideTaskMenu] = useState(false);
 
   return (
     <ConfigProvider locale={zhCN}>
@@ -90,8 +95,14 @@ export default function App() {
               setSelectedSubId={setSelectedSubId}
               hoveredId={hoveredId}
               setHoveredId={setHoveredId}
+              hideTaskMenu={hideTaskMenu}
+              setHideTaskMenu={setHideTaskMenu}
             />
-            <TaskList />
+            <TaskList
+              hideTaskMenu={hideTaskMenu}
+              setHideTaskMenu={setHideTaskMenu}
+              selectedSubId={selectedSubId}
+            />
           </div>
         </div>
       </div>

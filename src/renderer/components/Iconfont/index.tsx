@@ -26,7 +26,7 @@ const Iconfont = (props: IconProps): ReactElement => {
     >
       <i
         className={`iconfont ${iconName}`}
-        style={{ fontSize, color, ...style }}
+        style={{ fontSize, color, lineHeight: fontSize + 'px', ...style }}
       />
     </span>
   );

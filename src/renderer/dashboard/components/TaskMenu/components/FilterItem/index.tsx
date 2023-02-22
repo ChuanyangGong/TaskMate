@@ -10,8 +10,8 @@ import styles from './index.module.scss';
 interface FilterItemProps {
   itemData: FilterItemType;
   onChangeExpand: (id: string) => void;
-  onSelected: (type: string, id: string) => void;
-  selectedSubId: string;
+  onSelected: (type: string, id: string, title: string) => void;
+  selectedSubId: { id: string; title: string; };
   hoveredId: string;
   onEnter: (type: string, id: string) => void;
   onLeave: () => void;
@@ -86,7 +86,7 @@ export default function FilterItem(props: FilterItemProps) {
   // items 渲染
   const ItemsRender = useMemo(() => {
     return itemData.children.map((item) => {
-      const hasBeenSelected = `${itemData.id}|${item.id}` === selectedSubId;
+      const hasBeenSelected = `${itemData.id}|${item.id}` === selectedSubId.id;
       const hasBeenHovered = `${itemData.id}|${item.id}` === hoveredId;
 
       return (
@@ -95,7 +95,7 @@ export default function FilterItem(props: FilterItemProps) {
           className={`${styles.commonWrap} ${styles.childWrap} ${
             hasBeenSelected ? styles.commonSelected : ''
           }`}
-          onClick={() => onSelected(itemData.id, `${item.id}`)}
+          onClick={() => onSelected(itemData.id, `${item.id}`, item.name)}
           onMouseEnter={() => onEnter(itemData.id, `${item.id}`)}
           onMouseLeave={onLeave}
         >

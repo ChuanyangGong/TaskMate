@@ -4,8 +4,8 @@ import styles from './index.module.scss';
 
 interface DefaultItemProps {
   itemData: DefaultItemType;
-  selectedSubId: string;
-  onSelected: (type: string, id: string) => void;
+  selectedSubId: { id: string; title: string; };
+  onSelected: (type: string, id: string, title: string) => void;
 }
 
 export default function DefaultItem(props: DefaultItemProps) {
@@ -14,10 +14,10 @@ export default function DefaultItem(props: DefaultItemProps) {
   return (
     <div
       className={`${styles.commonWrap} ${styles.defaultWrap} ${
-        `default|${itemData.id}` === selectedSubId ? styles.commonSelected : ''
+        `default|${itemData.id}` === selectedSubId.id ? styles.commonSelected : ''
       }`}
       key={itemData.id}
-      onClick={() => onSelected('default', itemData.id)}
+      onClick={() => onSelected('default', itemData.id, itemData.title)}
     >
       <Iconfont
         iconName={`icon-${itemData.icon}`}

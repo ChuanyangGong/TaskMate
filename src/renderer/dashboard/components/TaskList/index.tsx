@@ -1,11 +1,28 @@
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import ListHeader from './components/ListHeader';
 import styles from './index.module.scss';
 
-export default function TaskList() {
+
+interface TaskListProps {
+  hideTaskMenu: boolean;
+  setHideTaskMenu: Dispatch<SetStateAction<boolean>>;
+  selectedSubId: { id: string; title: string; };
+}
+
+export default function TaskList(props: TaskListProps) {
+  const {
+    hideTaskMenu,
+    setHideTaskMenu,
+    selectedSubId
+  } = props;
+
   return (
     <div className={styles.menuWrap}>
-      {/* 默认框 */}
-      <div className={styles.defaultSelectionWrap} />
+      <ListHeader
+        hideTaskMenu={hideTaskMenu}
+        setHideTaskMenu={setHideTaskMenu}
+        selectedSubId={selectedSubId}
+      />
     </div>
   );
 }
