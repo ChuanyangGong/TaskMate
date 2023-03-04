@@ -8,6 +8,7 @@ import Header from './components/Header';
 import MainMenu from './components/MainMenu';
 import TaskList from './components/TaskList';
 import TaskMenu from './components/TaskMenu';
+import TaskDetail from './components/TaskDetail';
 
 const buttonList: MenuItem[] = [
   {
@@ -103,6 +104,7 @@ export default function App() {
               setHideTaskMenu={setHideTaskMenu}
               selectedSubId={selectedSubId}
             />
+            <TaskDetail />
           </div>
         </div>
       </div>

@@ -18,6 +18,8 @@ import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
 (async () => {
   const cfgManager = getConfigManager();
 
+  console.log(cfgManager.config?.userConfig.databasePath );
+
   await initialDBManager(cfgManager.config?.userConfig.databasePath || '');
 
   // 初始化主线程环境
