@@ -220,7 +220,16 @@ ipcMain.handle('dashboard:deleteCategoryOrTagItemByType', async (_, type: string
 ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamType) => {
   const categoryInclude: any = { model: Category };
   const tagInclude: any = { model: Tag };
-  const whereStatement: any = { status: filterParam.taskStatus};
+  const whereStatement: any = { status: filterParam.taskStatus, [Op.and]: []};
+
+  // 填充 keyword 过滤条件
+  if (filterParam?.keyword !== '') {
+    whereStatement[Op.and].push({ [Op.or]: [{
+      title: { [Op.like]: '%' + filterParam?.keyword + '%' }
+    },{
+      detail: { [Op.like]: '%' + filterParam?.keyword + '%' }
+    }]});
+  }
 
   // 填充按类别或标签过滤的条件
   if (filterParam?.categoryId) {
@@ -240,7 +249,7 @@ ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamTy
       orState.push({ startAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
       orState.push({ endAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
     }
-    whereStatement[Op.and] = { [Op.or]: orState};
+    whereStatement[Op.and].push({ [Op.or]: orState});
   }
 
   const tasks = await TaskRecord.findAll({

@@ -11,6 +11,7 @@ import TaskMenu from './components/TaskMenu';
 import TaskDetail from './components/TaskDetail';
 import dayjs from 'dayjs';
 import CONST from '../const';
+import { TaskRecord } from 'main/database/models/TaskRecord';
 
 const buttonList: MenuItem[] = [
   {
@@ -85,7 +86,7 @@ export default function App() {
     keyword: '',
     dateRange: null
   });
-  const [taskListItems, setTaskListItems] = useState([]);
+  const [taskListItems, setTaskListItems] = useState<any[]>([]);
 
   // 切换 taskMenu，修改过滤器参数
   const doSetSelectedSubId = useCallback((newSelectedSubId: selectedSubIdType) => {
@@ -110,6 +111,17 @@ export default function App() {
     setSelectedSubId(newSelectedSubId);
   }, [setSelectedSubId, filterParam]);
 
+  // 处理数据库返回的数据
+  const processData = useCallback((datas: any) => {
+    return datas.map((item: any) => {
+      return {
+        ...item,
+        tagIds: (item?.Tags || []).map((tag: any) => tag.id),
+        dirtyData: false,
+      }
+    });
+  }, []);
+
   // 获取数据
   const doGetTaskListData = useCallback(async () => {
     // 处理日期
@@ -121,7 +133,8 @@ export default function App() {
       ]
     }
     const data = await window.electron.dashboard.getTaskListData(newFilterParam);
-    console.log(data);
+    const processedData = processData(data);
+    setTaskListItems(processedData);
   }, [filterParam]);
 
   useEffect(() => {
@@ -160,6 +173,7 @@ export default function App() {
               selectedSubId={selectedSubId}
               filterParam={filterParam}
               setFilterParam={setFilterParam}
+              taskListItems={taskListItems}
             />
             <TaskDetail
               filterParam={filterParam}

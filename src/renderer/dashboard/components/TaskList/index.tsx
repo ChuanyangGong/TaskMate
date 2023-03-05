@@ -12,6 +12,7 @@ interface TaskListProps {
   selectedSubId: { id: string; title: string; };
   filterParam: FilterParamType;
   setFilterParam: Dispatch<SetStateAction<FilterParamType>>;
+  taskListItems: any[];
 }
 
 export default function TaskList(props: TaskListProps) {
@@ -21,6 +22,7 @@ export default function TaskList(props: TaskListProps) {
     selectedSubId,
     filterParam,
     setFilterParam,
+    taskListItems,
   } = props;
 
   const canDateRangeModify = useMemo(() => {
@@ -40,7 +42,9 @@ export default function TaskList(props: TaskListProps) {
         setFilterParam={setFilterParam}
         canDateRangeModify={canDateRangeModify}
       />
-      <ListItems />
+      <ListItems
+        taskListItems={taskListItems}
+      />
     </div>
   );
 }
