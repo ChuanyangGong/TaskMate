@@ -95,7 +95,11 @@ export default function FilterItem(props: FilterItemProps) {
           className={`${styles.commonWrap} ${styles.childWrap} ${
             hasBeenSelected ? styles.commonSelected : ''
           }`}
-          onClick={() => onSelected(itemData.id, `${item.id}`, item.name)}
+          onClick={() => {
+            if (!hasBeenSelected) {
+              onSelected(itemData.id, `${item.id}`, item.name)
+            }
+          }}
           onMouseEnter={() => onEnter(itemData.id, `${item.id}`)}
           onMouseLeave={onLeave}
         >

@@ -27,7 +27,7 @@ export default async function initModels(sequelize: Sequelize) {
   Category.hasMany(TaskRecord, {
     foreignKey: 'categoryId',
   });
-  TaskRecord.belongsTo(Category);
+  TaskRecord.belongsTo(Category, { foreignKey: 'categoryId' });
 
   TaskRecord.belongsToMany(Tag, { through: 'TaskRecord_Tag'});
   Tag.belongsToMany(TaskRecord, { through: 'TaskRecord_Tag'});

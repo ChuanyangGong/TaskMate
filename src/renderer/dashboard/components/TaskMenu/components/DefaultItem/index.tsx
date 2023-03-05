@@ -17,7 +17,11 @@ export default function DefaultItem(props: DefaultItemProps) {
         `default|${itemData.id}` === selectedSubId.id ? styles.commonSelected : ''
       }`}
       key={itemData.id}
-      onClick={() => onSelected('default', itemData.id, itemData.title)}
+      onClick={() => {
+        if (`default|${itemData.id}` !== selectedSubId.id) {
+          onSelected('default', itemData.id, itemData.title)
+        }
+      }}
     >
       <Iconfont
         iconName={`icon-${itemData.icon}`}

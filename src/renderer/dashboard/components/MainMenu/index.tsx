@@ -6,34 +6,37 @@ import {
   useMemo,
 } from 'react';
 import Iconfont from 'renderer/components/Iconfont';
-import { MenuItem } from 'typings/renderer/dashboard/components/App';
+import { FilterParamType, LoadTaskListFuncType, MenuItem } from 'typings/renderer/dashboard/App';
 import styles from './index.module.scss';
 
 interface MainMenuProps {
   buttonList: MenuItem[];
   selectedTitle: string;
   setSelectedTitle: Dispatch<SetStateAction<string>>;
+  setFilterParam: Dispatch<SetStateAction<FilterParamType>>;
+  filterParam: FilterParamType;
 }
 
 export default function MainMenu(props: MainMenuProps) {
-  const { buttonList, selectedTitle, setSelectedTitle } = props;
+  const { buttonList, selectedTitle, setSelectedTitle, setFilterParam, filterParam } = props;
+
+  const onSelect = useCallback(
+    (menuItem: MenuItem) => {
+      setSelectedTitle(menuItem.title);
+      setFilterParam({...filterParam, taskStatus: menuItem.taskStatus});
+    },
+    [setSelectedTitle, setFilterParam]
+  );
 
   // 初始化被选中的 menu item
   useEffect(() => {
     buttonList.some((item) => {
       if (item.show) {
-        setSelectedTitle(item.title);
+        onSelect(item);
       }
       return item.show;
     });
-  }, [buttonList, setSelectedTitle]);
-
-  const onSelect = useCallback(
-    (menuTitle: string) => {
-      setSelectedTitle(menuTitle);
-    },
-    [setSelectedTitle]
-  );
+  }, []);
 
   // 渲染 menu item
   const MenuItemButton = useMemo(() => {
@@ -46,7 +49,7 @@ export default function MainMenu(props: MainMenuProps) {
             className={`${styles.MenuItemWrap} ${
               item.title === selectedTitle ? styles.selected : ''
             }`}
-            onClick={() => onSelect(item.title)}
+            onClick={() => onSelect(item)}
           >
             <Iconfont
               iconName={`icon-${item.icon}`}

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import Divider from 'renderer/components/Divider';
-import { DefaultItemType } from 'typings/renderer/dashboard/App';
+import { DefaultItemType, selectedSubIdType } from 'typings/renderer/dashboard/App';
 import { FilterItemType } from 'typings/renderer/dashboard/components/TaskMenu';
 import DefaultItem from './components/DefaultItem';
 import FilterItem from './components/FilterItem';
@@ -16,7 +16,7 @@ import styles from './index.module.scss';
 interface TaskMenuProps {
   defaultList: DefaultItemType[];
   selectedSubId: { id: string; title: string; };
-  setSelectedSubId: Dispatch<SetStateAction<{ id: string; title: string; }>>;
+  doSetSelectedSubId: (newSelectedSubId: selectedSubIdType) => void;
   hoveredId: string;
   setHoveredId: Dispatch<SetStateAction<string>>;
   hideTaskMenu: boolean;
@@ -44,7 +44,7 @@ export default function TaskMenu(props: TaskMenuProps) {
   const {
     defaultList,
     selectedSubId,
-    setSelectedSubId,
+    doSetSelectedSubId,
     hoveredId,
     setHoveredId,
     hideTaskMenu,
@@ -54,13 +54,21 @@ export default function TaskMenu(props: TaskMenuProps) {
   // 选择过滤条件
   const onSelected = useCallback(
     (type: string, id: string, title: string) => {
-      setSelectedSubId({
+      doSetSelectedSubId({
         id: `${type}|${id}`,
         title
       });
     },
-    [setSelectedSubId]
+    [doSetSelectedSubId]
   );
+
+  // 初始化默认选择所有
+  useEffect(() => {
+    doSetSelectedSubId({
+      id: `default|${defaultList[0].id}`,
+      title: '所有',
+    })
+  }, []);
 
   // hover
   const onEnter = useCallback(

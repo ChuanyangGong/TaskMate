@@ -9,6 +9,8 @@ import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/Ta
 import { CategoryAlias } from '../../database/models/CategoryAlias';
 import { Tag } from '../../database/models/Tag';
 import { TagAlias } from '../../database/models/TagAlias';
+import { FilterParamType } from 'typings/renderer/dashboard/App';
+import { TaskRecord } from '../../database/models/TaskRecord';
 
 let dashboardWindow: BrowserWindow | null = null;
 
@@ -212,6 +214,44 @@ ipcMain.handle('dashboard:deleteCategoryOrTagItemByType', async (_, type: string
     await Tag.destroy({ where: { id }});
   }
   return true;
+});
+
+// 根据过滤条件获取任务列表数据
+ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamType) => {
+  const categoryInclude: any = { model: Category };
+  const tagInclude: any = { model: Tag };
+  const whereStatement: any = { status: filterParam.taskStatus};
+
+  // 填充按类别或标签过滤的条件
+  if (filterParam?.categoryId) {
+    whereStatement.categoryId = filterParam.categoryId;
+  }
+  if (filterParam?.tagId) {
+    tagInclude.where = { id: { [Op.in]: [filterParam.tagId] }};
+  }
+
+  // 填充按时间过滤的条件
+  if(Array.isArray(filterParam.dateRangeString)) {
+    let orState: any[] = [];
+    if (filterParam.taskStatus === 0) {
+      orState.push({ planStartAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
+      orState.push({ planEndAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
+    } else if (filterParam.taskStatus === 1) {
+      orState.push({ startAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
+      orState.push({ endAt: { [Op.gt]: filterParam.dateRangeString[0], [Op.lt]: filterParam.dateRangeString[1]} });
+    }
+    whereStatement[Op.and] = { [Op.or]: orState};
+  }
+
+  const tasks = await TaskRecord.findAll({
+    where: whereStatement,
+    include: [
+      categoryInclude,
+      tagInclude,
+    ]
+  })
+  const tasksRes = tasks.map(item => item.toJSON());
+  return tasksRes;
 });
 
 export const getDashboardWin = () => {
