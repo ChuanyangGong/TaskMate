@@ -122,6 +122,12 @@ export default function App() {
     });
   }, []);
 
+  // 当前选中的任务项
+  const [selectedItemId, setSelectedItemId] = useState(-1);
+  const selectedTaskItem = useMemo(() => {
+    return taskListItems.find((item) => item.id === selectedItemId);
+  }, [taskListItems, selectedItemId]);
+
   // 获取数据
   const doGetTaskListData = useCallback(async () => {
     // 处理日期
@@ -135,6 +141,7 @@ export default function App() {
     const data = await window.electron.dashboard.getTaskListData(newFilterParam);
     const processedData = processData(data);
     setTaskListItems(processedData);
+    setSelectedItemId(-1);
   }, [filterParam]);
 
   useEffect(() => {
@@ -174,9 +181,13 @@ export default function App() {
               filterParam={filterParam}
               setFilterParam={setFilterParam}
               taskListItems={taskListItems}
+              setSelectedItemId={setSelectedItemId}
+              selectedItemId={selectedItemId}
             />
             <TaskDetail
               filterParam={filterParam}
+              selectedTaskItem={selectedTaskItem}
+              hasTasks={taskListItems.length > 0}
             />
           </div>
         </div>

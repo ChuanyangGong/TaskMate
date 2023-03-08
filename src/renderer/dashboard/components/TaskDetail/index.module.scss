@@ -3,4 +3,17 @@
   width: 300px;
 
   padding: 22px 0 10px;
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+    color: #757575;
+    pointer-events: none;
+    user-select: none;
+  }
 }

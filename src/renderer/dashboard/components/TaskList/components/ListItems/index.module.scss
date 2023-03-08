@@ -27,6 +27,19 @@
     }
   }
 
+  .empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+    color: #757575;
+    pointer-events: none;
+    user-select: none;
+  }
+
   .taskWrap:hover {
     background: #F5F8FF;
   }
