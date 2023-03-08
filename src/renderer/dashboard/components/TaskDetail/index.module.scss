@@ -1,8 +1,54 @@
 .detailWrap {
   flex: none;
+  display: flex;
+  flex-direction: column;
   width: 300px;
 
-  padding: 22px 0 10px;
+  padding: 22px 0  0px;
+
+  .formWrap {
+    flex: auto;
+    padding: 0 10px;
+
+    .timePicker {
+      height: 32px;
+      width: 100%;
+      margin: 0;
+      border-bottom: 1px solid rgba(193, 188, 188, 0.3);
+    }
+
+    .hideBorder {
+      border: none !important;
+    }
+
+    .titleWrap {
+      display: flex;
+      margin-top: 5px;
+
+      .titleArea {
+        padding-right: 5px;
+        font-weight: 700;
+        font-size: 15.4px;
+        line-height: 18px;
+        margin-left: -5px;
+      }
+
+      .startButton {
+        flex: none;
+        width: 20px;
+      }
+    }
+
+    .detailArea {
+      margin-left: -5px;
+    }
+  }
+
+  .footer {
+    flex: none;
+    height: 38px;
+    border-top: 1px solid rgba(193, 188, 188, 0.3);
+  }
 
   .empty {
     display: flex;
