@@ -9,8 +9,10 @@ import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/Ta
 import { CategoryAlias } from '../../database/models/CategoryAlias';
 import { Tag } from '../../database/models/Tag';
 import { TagAlias } from '../../database/models/TagAlias';
-import { FilterParamType } from 'typings/renderer/dashboard/App';
+import { FilterParamType, TaskDetailItemType } from 'typings/renderer/dashboard/App';
 import { TaskRecord } from '../../database/models/TaskRecord';
+import { getDBManager } from '../../database/DatabaseManager';
+import { TimeSlice } from '../../database/models/TimeSlice';
 
 let dashboardWindow: BrowserWindow | null = null;
 
@@ -261,6 +263,69 @@ ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamTy
   })
   const tasksRes = tasks.map(item => item.toJSON());
   return tasksRes;
+});
+
+// 通过 id 获取任务详情
+ipcMain.handle('dashboard:getTaskDetailById', async (_, id: number) => {
+  const task = await TaskRecord.findByPk(id, {
+    include: [
+      { model: Category },
+      { model: Tag },
+    ]
+  });
+  const taskRes = task?.toJSON();
+  return taskRes;
+});
+
+// 新建或者更新任务
+ipcMain.on('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailItemType) => {
+  const dbManager = getDBManager();
+  dbManager?.sequelize.transaction(async (t) => {
+    console.log(taskRecord)
+    let taskItem = await TaskRecord.findByPk(taskRecord?.id || -1, { transaction: t });
+
+    // 判断是否存在，如果不存在就新建一个
+    if (taskItem === null) {
+      taskItem = await TaskRecord.create({}, { transaction: t });
+    }
+
+    taskItem.title = taskRecord.title;
+    taskItem.detail = taskRecord.detail;
+    taskItem.categoryId = taskRecord.categoryId;
+    taskItem.planStartAt = taskRecord.planStartAt;
+    taskItem.planEndAt = taskRecord.planEndAt;
+    taskItem.startAt = taskRecord.startAt;
+    taskItem.endAt = taskRecord.endAt;
+    taskItem.status = taskRecord.status;
+    await taskItem.save({ transaction: t });
+
+    // 更新时间片
+    if (taskRecord.updateTimeSliceList) {
+      taskItem.setTimeSlices([], { transaction: t });
+      const newTimeSlices = await Promise.all((taskRecord.timeSliceList || []).map(async (item) => {
+        return await TimeSlice.create({
+          startAt: item.startAt,
+          endAt: item.endAt,
+          duration: item.duration
+        }, { transaction: t });
+      }));
+      taskItem.setTimeSlices(newTimeSlices);
+    }
+
+    // 更新标签
+    if (taskRecord.updateTagList) {
+      const tags = await Tag.findAll({
+        where: {
+          id: taskRecord.tagIds || [],
+        }
+      })
+      taskItem.setTags(tags, { transaction: t });
+    }
+
+    // 触发列表刷新
+    event.reply('dashboard:invokeRefreshTaskList');
+  });
+  return true;
 });
 
 export const getDashboardWin = () => {

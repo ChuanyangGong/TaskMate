@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { FilterParamType } from 'typings/renderer/dashboard/App';
+import { FilterParamType, TaskDetailItemType } from 'typings/renderer/dashboard/App';
 import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/TaskMenu';
 
 export default {
@@ -8,4 +8,8 @@ export default {
   saveOrNewItemByType: (type: string, data: FilterItemFormDataType) => ipcRenderer.invoke('dashboard:saveOrNewItemByType', type, data),
   deleteCategoryOrTagItemByType: (type: string, id: number) => ipcRenderer.invoke('dashboard:deleteCategoryOrTagItemByType', type, id),
   getTaskListData: (filterParam: FilterParamType) => ipcRenderer.invoke('dashboard:getTaskListData', filterParam),
+  getTaskDetailById: (id: number) => ipcRenderer.invoke('dashboard:getTaskDetailById', id),
+  updateOrCreateTask: (recordItem: TaskDetailItemType) => ipcRenderer.send('dashboard:updateOrCreateTask', recordItem),
+  invokeRefreshTaskList: (callback: any) => ipcRenderer.on('dashboard:invokeRefreshTaskList', callback),
+  clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList'),
 };

@@ -36,3 +36,27 @@ export interface selectedSubIdType {
   id: string;
   title: string;
 }
+
+export interface TimeSliceItemType {
+  id: number | null;
+  startAt: Date | null;
+  endAt: Date | null;
+  duration: number | null;
+}
+
+export interface TaskDetailItemType {
+  id: number | null;
+  title: string | null;
+  detail: string | null;
+  planStartAt: Date | null;
+  planEndAt: Date | null;
+  startAt: Date | null;
+  endAt: Date | null;
+  duration: number | null;
+  status: number;
+  categoryId: number | null;
+  tagIds: number[] | null;
+  updateTagList: boolean;
+  updateTimeSliceList: boolean;
+  timeSliceList: TimeSliceItemType[] | null;
+}

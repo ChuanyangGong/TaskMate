@@ -129,7 +129,7 @@ export default function App() {
   }, [taskListItems, selectedItemId]);
 
   // 获取数据
-  const doGetTaskListData = useCallback(async () => {
+  const doGetTaskListData = useCallback(async (reSetSelectedId = true) => {
     // 处理日期
     const newFilterParam: FilterParamType = {...filterParam, dateRangeString: null};
     if (Array.isArray(newFilterParam.dateRange)) {
@@ -141,12 +141,24 @@ export default function App() {
     const data = await window.electron.dashboard.getTaskListData(newFilterParam);
     const processedData = processData(data);
     setTaskListItems(processedData);
-    setSelectedItemId(-1);
+    if (reSetSelectedId){
+      setSelectedItemId(-1);
+    }
   }, [filterParam]);
 
   useEffect(() => {
     doGetTaskListData();
   }, [doGetTaskListData]);
+
+  // 刷新表单
+  useEffect(() => {
+      window.electron.dashboard.invokeRefreshTaskList(() => {
+        doGetTaskListData(false);
+      })
+      return () => {
+          window.electron.dashboard.clearInvokeRefreshTaskList()
+      }
+  }, [doGetTaskListData])
 
   return (
     <ConfigProvider locale={zhCN}>
@@ -186,7 +198,7 @@ export default function App() {
             />
             <TaskDetail
               filterParam={filterParam}
-              selectedTaskItem={selectedTaskItem}
+              selectedItemId={selectedItemId}
               hasTasks={taskListItems.length > 0}
             />
           </div>

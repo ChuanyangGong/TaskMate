@@ -4,6 +4,7 @@ import { CategoryAlias, initCategoryAlias } from './CategoryAlias';
 import { Tag, initTag } from './Tag';
 import { TagAlias, initTagAlias } from './TagAlias';
 import { TaskRecord, initTaskRecord } from './TaskRecord';
+import { TimeSlice, initTimeSlice } from './TimeSlice';
 
 export default async function initModels(sequelize: Sequelize) {
   // 初始化模型
@@ -12,6 +13,7 @@ export default async function initModels(sequelize: Sequelize) {
   initTag(sequelize);
   initTagAlias(sequelize);
   initTaskRecord(sequelize);
+  initTimeSlice(sequelize);
 
   // 建立关系
   Category.hasMany(CategoryAlias, {
@@ -31,4 +33,7 @@ export default async function initModels(sequelize: Sequelize) {
 
   TaskRecord.belongsToMany(Tag, { through: 'TaskRecord_Tag'});
   Tag.belongsToMany(TaskRecord, { through: 'TaskRecord_Tag'});
+
+  TimeSlice.belongsTo(TaskRecord, { foreignKey: 'taskId' });
+  TaskRecord.hasMany(TimeSlice, { foreignKey: 'taskId' });
 }

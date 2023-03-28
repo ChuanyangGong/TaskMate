@@ -2,7 +2,7 @@
   flex: none;
   height: 100%;
   width: 160px;
-  background-color: #F0F4FF;
+  background-color: #f0f4ff;
 
   border-right: 1px solid rgba(193, 188, 188, 0.3);
   $itemWidth: 124px;
@@ -35,11 +35,11 @@
     }
   }
 
-  .MenuItemWrap:hover{
+  .MenuItemWrap:hover {
     background: rgba(54, 116, 240, 0.06);
   }
 
   .selected {
-    background: rgba(54, 116, 240, 0.15)!important;
+    background: rgba(54, 116, 240, 0.15) !important;
   }
 }

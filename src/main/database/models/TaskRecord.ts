@@ -1,8 +1,24 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Category } from './Category';
+import { Tag } from './Tag';
+import { TimeSlice } from './TimeSlice';
 
 export class TaskRecord extends Model {
-  declare name: string;
-  declare tagId: number;
+  declare id: number;
+  declare title: string | null;
+  declare detail: string | null;
+  declare planStartAt: Date | null;
+  declare planEndAt: Date | null;
+  declare startAt: Date | null;
+  declare endAt: Date | null;
+  declare duration: number | null;
+  declare status: number | null;
+  declare timeSlices: TimeSlice[] | null;
+  declare tags: Tag[] | null;
+  declare category: Category | null;
+  declare categoryId: number | null;
+  declare setTimeSlices: (timeSlices: TimeSlice[], option?: any) => void;
+  declare setTags: (tags: Tag[], option?: any) => void;
 }
 
 export function initTaskRecord(sequelize: Sequelize) {
