@@ -1,6 +1,6 @@
 import { Button, ConfigProvider } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DefaultItemType, FilterParamType, MenuItem, selectedSubIdType } from 'typings/renderer/dashboard/App';
+import { DefaultItemType, FilterParamType, MenuItem, selectedSubIdType, TaskDetailItemType } from 'typings/renderer/dashboard/App';
 import '../App.scss';
 import zhCN from 'antd/locale/zh_CN';
 import styles from './App.module.scss';
@@ -160,6 +160,38 @@ export default function App() {
       }
   }, [doGetTaskListData])
 
+  // 添加新任务
+  const onClickAddTask = useCallback(async () => {
+    let taskDetail: TaskDetailItemType = {
+      id: null,
+      title: '',
+      detail: null,
+      planStartAt: null,
+      planEndAt: null,
+      startAt: null,
+      endAt: null,
+      duration: null,
+      status: filterParam.taskStatus,
+      categoryId: null,
+      tagIds: [],
+      updateTagList: false,
+      updateTimeSliceList: false,
+      timeSliceList: null,
+    }
+    if (filterParam?.categoryId) {
+      taskDetail.categoryId = filterParam.categoryId;
+    }
+    if (filterParam?.tagId) {
+      taskDetail.tagIds = [filterParam.tagId];
+    }
+    if (filterParam?.taskStatus === 0 && filterParam?.dateRange) {
+      taskDetail.planStartAt = filterParam.dateRange[0].toDate();
+      taskDetail.planEndAt = filterParam.dateRange[1].toDate();
+    }
+   const newTaskId = await window.electron.dashboard.updateOrCreateTask(taskDetail);
+   setSelectedItemId(newTaskId);
+  }, [filterParam, selectedSubId]);
+
   return (
     <ConfigProvider locale={zhCN}>
       <div className={styles.framework}>
@@ -195,6 +227,7 @@ export default function App() {
               taskListItems={taskListItems}
               setSelectedItemId={setSelectedItemId}
               selectedItemId={selectedItemId}
+              onClickAddTask={onClickAddTask}
             />
             <TaskDetail
               filterParam={filterParam}

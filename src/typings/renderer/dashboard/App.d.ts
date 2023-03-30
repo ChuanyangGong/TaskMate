@@ -45,18 +45,18 @@ export interface TimeSliceItemType {
 }
 
 export interface TaskDetailItemType {
-  id: number | null;
-  title: string | null;
-  detail: string | null;
-  planStartAt: Date | null;
-  planEndAt: Date | null;
-  startAt: Date | null;
-  endAt: Date | null;
-  duration: number | null;
-  status: number;
-  categoryId: number | null;
-  tagIds: number[] | null;
-  updateTagList: boolean;
-  updateTimeSliceList: boolean;
-  timeSliceList: TimeSliceItemType[] | null;
+  id?: number | null;
+  title?: string | null;
+  detail?: string | null;
+  planStartAt?: Date | null;
+  planEndAt?: Date | null;
+  startAt?: Date | null;
+  endAt?: Date | null;
+  duration?: number | null;
+  status?: number | null;
+  categoryId?: number | null;
+  tagIds?: number[] | null;
+  updateTagList?: boolean;
+  updateTimeSliceList?: boolean;
+  timeSliceList?: TimeSliceItemType[] | null;
 }

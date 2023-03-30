@@ -9,7 +9,7 @@ export default {
   deleteCategoryOrTagItemByType: (type: string, id: number) => ipcRenderer.invoke('dashboard:deleteCategoryOrTagItemByType', type, id),
   getTaskListData: (filterParam: FilterParamType) => ipcRenderer.invoke('dashboard:getTaskListData', filterParam),
   getTaskDetailById: (id: number) => ipcRenderer.invoke('dashboard:getTaskDetailById', id),
-  updateOrCreateTask: (recordItem: TaskDetailItemType) => ipcRenderer.send('dashboard:updateOrCreateTask', recordItem),
+  updateOrCreateTask: (recordItem: TaskDetailItemType) => ipcRenderer.invoke('dashboard:updateOrCreateTask', recordItem),
   invokeRefreshTaskList: (callback: any) => ipcRenderer.on('dashboard:invokeRefreshTaskList', callback),
-  clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList'),
+  clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList')
 };

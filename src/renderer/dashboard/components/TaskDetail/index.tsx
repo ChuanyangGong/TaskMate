@@ -30,6 +30,7 @@ export default function TaskDetail(props: TaskDetailProps) {
   const [form] = Form.useForm();
 
   const inputRef = useRef<InputRef>(null);
+  const titleRef = useRef<InputRef>(null);
   const [selectedTaskItem, setSelectedTaskItem] = useState<any>(null);
 
   // 判断是否是待办任务
@@ -55,6 +56,7 @@ export default function TaskDetail(props: TaskDetailProps) {
       ...selectedTaskItem,
       planStartAt: selectedTaskItem?.planStartAt ? dayjs(selectedTaskItem.planStartAt) : null,
     });
+    titleRef.current?.focus();
   }, [selectedTaskItem])
 
   // 获取任务详情
@@ -90,6 +92,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 <div className={styles.titleWrap}>
                   <Form.Item name="title" noStyle>
                     <Input.TextArea
+                      ref={titleRef}
                       className={styles.titleArea}
                       bordered={false}
                       placeholder={`${isTodo ? '准备做' : '做了'}什么？`}

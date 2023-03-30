@@ -259,6 +259,9 @@ ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamTy
     include: [
       categoryInclude,
       tagInclude,
+    ],
+    order: [
+      ['createdAt', 'DESC']
     ]
   })
   const tasksRes = tasks.map(item => item.toJSON());
@@ -278,29 +281,28 @@ ipcMain.handle('dashboard:getTaskDetailById', async (_, id: number) => {
 });
 
 // 新建或者更新任务
-ipcMain.on('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailItemType) => {
+ipcMain.handle('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailItemType) => {
+  console.log(taskRecord);
   const dbManager = getDBManager();
-  dbManager?.sequelize.transaction(async (t) => {
-    console.log(taskRecord)
+  let taskId = -1;
+  await dbManager?.sequelize.transaction(async (t) => {
     let taskItem = await TaskRecord.findByPk(taskRecord?.id || -1, { transaction: t });
 
     // 判断是否存在，如果不存在就新建一个
     if (taskItem === null) {
       taskItem = await TaskRecord.create({}, { transaction: t });
     }
-
-    taskItem.title = taskRecord.title;
-    taskItem.detail = taskRecord.detail;
-    taskItem.categoryId = taskRecord.categoryId;
-    taskItem.planStartAt = taskRecord.planStartAt;
-    taskItem.planEndAt = taskRecord.planEndAt;
-    taskItem.startAt = taskRecord.startAt;
-    taskItem.endAt = taskRecord.endAt;
-    taskItem.status = taskRecord.status;
-    await taskItem.save({ transaction: t });
+    taskItem.title = taskRecord?.title || taskItem.title;
+    taskItem.detail = taskRecord?.detail || taskItem.detail;
+    taskItem.categoryId = taskRecord?.categoryId || taskItem.categoryId;
+    taskItem.planStartAt = taskRecord?.planStartAt || taskItem.planStartAt;
+    taskItem.planEndAt = taskRecord?.planEndAt || taskItem.planEndAt;
+    taskItem.startAt = taskRecord?.startAt || taskItem.startAt;
+    taskItem.endAt = taskRecord?.endAt || taskItem.endAt;
+    taskItem.status = taskRecord?.status !== undefined ? taskRecord?.status : taskItem.status;
 
     // 更新时间片
-    if (taskRecord.updateTimeSliceList) {
+    if (taskRecord?.updateTimeSliceList) {
       taskItem.setTimeSlices([], { transaction: t });
       const newTimeSlices = await Promise.all((taskRecord.timeSliceList || []).map(async (item) => {
         return await TimeSlice.create({
@@ -313,7 +315,7 @@ ipcMain.on('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailI
     }
 
     // 更新标签
-    if (taskRecord.updateTagList) {
+    if (taskRecord?.updateTagList) {
       const tags = await Tag.findAll({
         where: {
           id: taskRecord.tagIds || [],
@@ -322,10 +324,13 @@ ipcMain.on('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailI
       taskItem.setTags(tags, { transaction: t });
     }
 
+    await taskItem.save({ transaction: t });
+
+    taskId = taskItem?.id || -1;
     // 触发列表刷新
-    event.reply('dashboard:invokeRefreshTaskList');
+    dashboardWindow?.webContents.send('dashboard:invokeRefreshTaskList');
   });
-  return true;
+  return taskId;
 });
 
 export const getDashboardWin = () => {

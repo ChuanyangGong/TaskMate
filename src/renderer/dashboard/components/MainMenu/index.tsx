@@ -22,10 +22,12 @@ export default function MainMenu(props: MainMenuProps) {
 
   const onSelect = useCallback(
     (menuItem: MenuItem) => {
-      setSelectedTitle(menuItem.title);
-      setFilterParam({...filterParam, taskStatus: menuItem.taskStatus});
+      if (menuItem.title !== selectedTitle) {
+        setSelectedTitle(menuItem.title);
+        setFilterParam({...filterParam, taskStatus: menuItem.taskStatus});
+      }
     },
-    [setSelectedTitle, setFilterParam]
+    [setSelectedTitle, setFilterParam, filterParam]
   );
 
   // 初始化被选中的 menu item

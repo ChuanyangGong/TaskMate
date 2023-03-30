@@ -15,6 +15,7 @@ interface TaskListProps {
   taskListItems: any[];
   setSelectedItemId: Dispatch<SetStateAction<number>>;
   selectedItemId: number;
+  onClickAddTask: any;
 }
 
 export default function TaskList(props: TaskListProps) {
@@ -27,6 +28,7 @@ export default function TaskList(props: TaskListProps) {
     taskListItems,
     setSelectedItemId,
     selectedItemId,
+    onClickAddTask
   } = props;
 
   const canDateRangeModify = useMemo(() => {
@@ -40,6 +42,7 @@ export default function TaskList(props: TaskListProps) {
         hideTaskMenu={hideTaskMenu}
         setHideTaskMenu={setHideTaskMenu}
         selectedSubId={selectedSubId}
+        onClickAddTask={onClickAddTask}
       />
       <ListCommonFilter
         filterParam={filterParam}

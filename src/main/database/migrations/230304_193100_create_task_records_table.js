@@ -11,7 +11,7 @@ export default {
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false,
+        default: "",
       },
       detail: {
         type: Sequelize.STRING,
@@ -27,15 +27,15 @@ export default {
       },
       startAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       endAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       duration: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: Sequelize.INTEGER,
