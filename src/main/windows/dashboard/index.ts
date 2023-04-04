@@ -78,6 +78,12 @@ ipcMain.handle('dashboard:getFilterListChildren', async () => {
     return obj.findAll({
       where: { finishedAt: { [Op.is]: null } },
       order: Sequelize.col('order'),
+      include: [
+        {
+          model: obj === Category ? CategoryAlias : TagAlias,
+          attributes: ['name'],
+        },
+      ],
     });
   });
   const promiseLise = Promise.all(lists);
@@ -294,7 +300,11 @@ ipcMain.handle('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDet
     }
     taskItem.title = taskRecord?.title || taskItem.title;
     taskItem.detail = taskRecord?.detail || taskItem.detail;
-    taskItem.categoryId = taskRecord?.categoryId || taskItem.categoryId;
+    if (taskRecord.forceUpdateCategory === true) {
+      taskItem.categoryId = taskRecord.categoryId !== undefined ? taskRecord.categoryId : null;
+    } else {
+      taskItem.categoryId = taskRecord?.categoryId || taskItem.categoryId;
+    }
     taskItem.planStartAt = taskRecord?.planStartAt || taskItem.planStartAt;
     taskItem.planEndAt = taskRecord?.planEndAt || taskItem.planEndAt;
     taskItem.startAt = taskRecord?.startAt || taskItem.startAt;

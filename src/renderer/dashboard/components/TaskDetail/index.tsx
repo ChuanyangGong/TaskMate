@@ -10,12 +10,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import Iconfont from 'renderer/components/Iconfont';
 import { FilterParamType } from 'typings/renderer/dashboard/App';
 import styles from './index.module.scss';
 import emptyPic from '../../../../../assets/images/empty_detail.png';
-import { DatePicker, Form, Input, InputRef } from 'antd';
+import { DatePicker, Form, Input, InputRef, Popover } from 'antd';
 import { debounce, throttle } from '../../../utils';
+import Iconfont from 'renderer/components/Iconfont';
+import CategorySelector from 'renderer/components/CategorySelector';
 
 interface TaskDetailProps {
   filterParam: FilterParamType;
@@ -73,6 +74,15 @@ export default function TaskDetail(props: TaskDetailProps) {
     getTaskDetail(selectedItemId);
   }, [selectedItemId]);
 
+  // 更新任务分类
+  const onUpdateSelector = useCallback(async (id: number | null) => {
+    if (selectedItemId) {
+      await window.electron.dashboard.updateOrCreateTask({id: selectedItemId, categoryId: id, forceUpdateCategory: true});
+      await getTaskDetail(selectedItemId);
+    }
+  }, [selectedTaskItem]);
+
+
   return (
     <div className={styles.detailWrap}>
       {
@@ -117,7 +127,23 @@ export default function TaskDetail(props: TaskDetailProps) {
               </div>
             </Form>
             <div className={styles.footer}>
-              aaa
+              {/* 左边的分类 icon button */}
+              <Popover
+                className={styles.footerButtonWrap}
+                arrow={false}
+                placement="topLeft"
+                trigger="click"
+                destroyTooltipOnHide={true}
+                content={
+                  <CategorySelector
+                    selectedId={selectedTaskItem.categoryId}
+                    onUpdateSelector={onUpdateSelector}
+                  />
+                }
+              >
+                <Iconfont iconName="icon-move" className={styles.iconStyle}/>
+                <div className={styles.textStyle}>{selectedTaskItem.Category === null ? '未分类' : selectedTaskItem.Category.name}</div>
+              </Popover>
             </div>
           </>
         )

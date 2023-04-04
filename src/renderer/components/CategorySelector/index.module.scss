@@ -1,0 +1,70 @@
+.catetorySelectorWrap {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  height: 300px;
+  user-select: none;
+
+  .inputStyle {
+    flex: none;
+    padding: 2px 5px;
+    margin: 0 3px 8px;
+    width: calc(100% - 5px);
+    font-size: 14px;
+  }
+
+  .itemWrap {
+    flex: auto;
+    overflow: hidden auto;
+
+    .selectorItemWrap {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0 3px;
+      border-radius: 3px;
+      font-size: 14.5px;
+      line-height: 29px;
+      height: 29px;
+      overflow: hidden;
+
+      .iconStyle {
+        flex: none;
+        margin-right: 3px;
+      }
+
+      .textArea {
+        flex: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .selectorItemWrap:hover {
+      background-color: #f5f8ff;
+    }
+
+    /* 滚动条样式 */
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 10px;
+      background-color: #f5f5f5;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #fff;
+    }
+  }
+  .itemWrap:hover {
+    &::-webkit-scrollbar-thumb {
+      background-color: #bbbcbe;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #787b7e;
+    }
+  }
+}

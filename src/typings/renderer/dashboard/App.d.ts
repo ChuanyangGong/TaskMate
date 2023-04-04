@@ -54,6 +54,7 @@ export interface TaskDetailItemType {
   endAt?: Date | null;
   duration?: number | null;
   status?: number | null;
+  forceUpdateCategory?: boolean;
   categoryId?: number | null;
   tagIds?: number[] | null;
   updateTagList?: boolean;
