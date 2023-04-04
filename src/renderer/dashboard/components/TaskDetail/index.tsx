@@ -14,7 +14,7 @@ import { FilterParamType } from 'typings/renderer/dashboard/App';
 import styles from './index.module.scss';
 import emptyPic from '../../../../../assets/images/empty_detail.png';
 import { DatePicker, Form, Input, InputRef, Popover } from 'antd';
-import { debounce, throttle } from '../../../utils';
+import { convertDateToString, debounce, throttle, timeAligh } from '../../../utils';
 import Iconfont from 'renderer/components/Iconfont';
 import CategorySelector from 'renderer/components/CategorySelector';
 
@@ -22,6 +22,12 @@ interface TaskDetailProps {
   filterParam: FilterParamType;
   hasTasks: boolean;
   selectedItemId: number;
+}
+
+interface infoType {
+  duration: string;
+  timeRange: string[];
+  timeSliceWeight: [boolean, number][];
 }
 
 const updateOrCreateTaskApi = throttle(window.electron.dashboard.updateOrCreateTask, 500);
@@ -83,6 +89,64 @@ export default function TaskDetail(props: TaskDetailProps) {
   }, [selectedTaskItem]);
 
 
+  // 显示时长信息的数据
+  const timeSliceInfo = useMemo(() => {
+    if (selectedTaskItem === null || selectedTaskItem.duration === null) {
+      return null;
+    }
+
+    const info: infoType = {
+      duration: '',
+      timeRange: [
+        convertDateToString(selectedTaskItem.startAt, "YYYY-MM-DD HH:mm"),
+        convertDateToString(selectedTaskItem.endAt, "YYYY-MM-DD HH:mm")
+      ],
+      timeSliceWeight: []
+    };
+
+    // 计算总时长
+    let totalSeconds = selectedTaskItem.duration;
+    let timeDetailList = [];
+    let hours = Math.floor(totalSeconds / (60 * 60));
+    totalSeconds = totalSeconds % (60 * 60);
+    let minutes = Math.floor(totalSeconds / (60));
+    totalSeconds = totalSeconds % (60);
+    if (hours > 0) {
+      info.duration = `${timeAligh(hours, 1)} 时 ${timeAligh(minutes)} 分`;
+    } else {
+      info.duration = `${timeAligh(minutes)} 分 ${timeAligh(totalSeconds)} 秒`;
+    }
+
+    // 生成时间分布
+    const timeMap = new Map();
+    selectedTaskItem.TimeSlice?.forEach((sliceItem: any) => {
+      let startAt = sliceItem.startAt.valueOf();
+      let endAt = sliceItem.endAt.valueOf();
+      if (!timeMap.has(startAt)) {
+        timeMap.set(startAt, 0);
+      }
+      timeMap.set(startAt, timeMap.get(startAt) + 1);
+      if (!timeMap.has(endAt)) {
+        timeMap.set(endAt, 0);
+      }
+      timeMap.set(endAt, timeMap.get(endAt) - 1);
+    })
+    let timeArray = Array.from(timeMap);
+    timeArray.sort((a, b) => a[0] - b[0]);
+    let curCounter = 0;
+    let lastTimePoint = 0;
+    timeArray.forEach((item, idx) => {
+      if (idx > 0) {
+        info.timeSliceWeight.push([curCounter > 0, (item[0] - lastTimePoint) / 1000]);
+      }
+      lastTimePoint = item[0];
+      curCounter += item[1];
+    });
+
+    return info;
+  }, [selectedTaskItem]);
+
+
   return (
     <div className={styles.detailWrap}>
       {
@@ -97,8 +161,9 @@ export default function TaskDetail(props: TaskDetailProps) {
               <Form.Item name="planStartAt" className={`${styles.timePicker} ${!isTodo ? '' : styles.hideBorder}`}>
                 {isTodo && <DatePicker bordered={false} style={{width: 120, marginLeft: -5}} />}
               </Form.Item>
-              {/* 标题 */}
+              {/* 任务内容 */}
               <div className={styles.contentWrap}>
+                {/* 标题 */}
                 <div className={styles.titleWrap}>
                   <Form.Item name="title" noStyle>
                     <Input.TextArea
@@ -124,6 +189,23 @@ export default function TaskDetail(props: TaskDetailProps) {
                   />
                 </Form.Item>
                 <div className={styles.focus} onClick={() => inputRef.current!.focus({cursor: 'end'}) } />
+                {/* 时间编辑 */}
+                {
+                  timeSliceInfo && (
+                    <div className={styles.timeSliceWrap}>
+                      <div>总时长：{timeSliceInfo.duration}</div>
+                      <div>时间范围：{timeSliceInfo?.timeRange?.[0]} 至 {timeSliceInfo?.timeRange?.[1]}</div>
+                      <div>时间分布：</div>
+                      <div className={styles.timeSliceBoxWrap}>
+                        {timeSliceInfo.timeSliceWeight.map((item) => {
+                          return (
+                            <div style={{flexBasis: item[1]}} className={`${styles.timeSliceItem} ${item[0] ? styles.blue : ''}`} />
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )
+                }
               </div>
             </Form>
             <div className={styles.footer}>

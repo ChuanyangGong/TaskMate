@@ -280,6 +280,7 @@ ipcMain.handle('dashboard:getTaskDetailById', async (_, id: number) => {
     include: [
       { model: Category },
       { model: Tag },
+      { model: TimeSlice },
     ]
   });
   const taskRes = task?.toJSON();

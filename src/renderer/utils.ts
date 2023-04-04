@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number,
@@ -73,4 +74,18 @@ export function throttle<T extends (...args: any[]) => void>(
   };
 
   return throttled;
+}
+export function timeAligh(input: number, digit = 2) {
+  let res = input.toString();
+  while(res.length < digit) {
+    res = "0" + res;
+  }
+  return res;
+}
+
+export function convertDateToString(input: Date | null | undefined, format = "YYYY-MM-DD HH:mm:ss") {
+  if (!(input instanceof Date)) {
+    return "";
+  }
+  return dayjs(input).format(format);
 }
