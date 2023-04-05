@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { BorderOutlined, MinusOutlined } from '@ant-design/icons/lib/icons';
+import { BorderOutlined, MinusCircleOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons/lib/icons';
 import dayjs from 'dayjs';
 import {
   Dispatch,
@@ -13,7 +13,7 @@ import {
 import { FilterParamType } from 'typings/renderer/dashboard/App';
 import styles from './index.module.scss';
 import emptyPic from '../../../../../assets/images/empty_detail.png';
-import { DatePicker, Form, Input, InputRef, Popover } from 'antd';
+import { Button, DatePicker, Form, Input, InputRef, Modal, Popover, TimePicker } from 'antd';
 import { convertDateToString, debounce, throttle, timeAligh } from '../../../utils';
 import Iconfont from 'renderer/components/Iconfont';
 import CategorySelector from 'renderer/components/CategorySelector';
@@ -31,6 +31,23 @@ interface infoType {
 }
 
 const updateOrCreateTaskApi = throttle(window.electron.dashboard.updateOrCreateTask, 500);
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 3 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 21 },
+  },
+};
+
+const formItemLayoutWithOutLabel = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 21, offset: 3 },
+  },
+};
 
 export default function TaskDetail(props: TaskDetailProps) {
   const { filterParam, hasTasks, selectedItemId } = props;
@@ -146,6 +163,12 @@ export default function TaskDetail(props: TaskDetailProps) {
     return info;
   }, [selectedTaskItem]);
 
+  // 编辑任务 time slice
+  const [openTimeSliceModal, setOpenTimeSliceModal] = useState(false);
+  const onFinish = (values: any) => {
+    console.log('Received values of form:', values);
+  };
+
 
   return (
     <div className={styles.detailWrap}>
@@ -191,13 +214,17 @@ export default function TaskDetail(props: TaskDetailProps) {
                 <div className={styles.focus} onClick={() => inputRef.current!.focus({cursor: 'end'}) } />
                 {/* 时间编辑 */}
                 {
-                  timeSliceInfo && (
+                  !isTodo && (
                     <div className={styles.timeSliceWrap}>
-                      <div>总时长：{timeSliceInfo.duration}</div>
-                      <div>时间范围：{timeSliceInfo?.timeRange?.[0]} 至 {timeSliceInfo?.timeRange?.[1]}</div>
+                      {/* 编辑按钮 */}
+                      <div className={styles.editIcon} onClick={() => setOpenTimeSliceModal(true)}>
+                        <Iconfont iconName='icon-edit' iconColor='#666' size={15}/>
+                      </div>
+                      <div>总时长：{timeSliceInfo?.duration || "-"}</div>
+                      <div>时间范围：{timeSliceInfo?.timeRange?.[0] || "-"} 至 {timeSliceInfo?.timeRange?.[1] || "-"}</div>
                       <div>时间分布：</div>
                       <div className={styles.timeSliceBoxWrap}>
-                        {timeSliceInfo.timeSliceWeight.map((item) => {
+                        {timeSliceInfo?.timeSliceWeight.map((item) => {
                           return (
                             <div style={{flexBasis: item[1]}} className={`${styles.timeSliceItem} ${item[0] ? styles.blue : ''}`} />
                           )
@@ -238,6 +265,67 @@ export default function TaskDetail(props: TaskDetailProps) {
           </div>
         )
       }
+      {/* 删除分类、标签 */}
+      <Modal
+        title={`编辑时间分布`}
+        open={openTimeSliceModal}
+        mask={false}
+        maskClosable={false}
+        width={550}
+        onCancel={() => setOpenTimeSliceModal(false)}
+        onOk={onFinish}
+        // confirmLoading={submitting}
+      >
+        <Form
+          name="timeSliceEditor"
+          {...formItemLayoutWithOutLabel}
+          className={styles.formWrapStyle}
+        >
+          <Form.List
+            name="timeSlice"
+            rules={[]}
+          >
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields.map((field, index) => (
+                  <Form.Item
+                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                    label={index === 0 ? '时间记录' : ''}
+                    required={false}
+                    key={field.key}
+                  >
+                    <Form.Item
+                      {...field}
+                      validateTrigger={['onChange', 'onBlur']}
+                      rules={[{required: true, message: "请添加起止时间记录，或删除这一项"}]}
+                      noStyle
+                    >
+                      <DatePicker.RangePicker bordered={false} style={{width: "94%"}} showTime/>
+                    </Form.Item>
+                    {fields.length > 1 ? (
+                      <MinusCircleOutlined
+                        style={{ margin: '0 4px 0 8px'}}
+                        onClick={() => remove(field.name)}
+                      />
+                    ) : null}
+                  </Form.Item>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    style={{ width: '92%' }}
+                    icon={<PlusOutlined />}
+                  >
+                    添加时间项
+                  </Button>
+                  <Form.ErrorList errors={errors} />
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form>
+      </Modal>
     </div>
   );
 }

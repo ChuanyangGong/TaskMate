@@ -69,6 +69,7 @@
 
       .timeSliceWrap {
         flex: none;
+        position: relative;
         height: 160px;
         padding: 5px 0;
         border-top: 1px solid rgba(193, 188, 188, 0.3);
@@ -93,6 +94,14 @@
           .blue {
             background-color: #CBD8FE;
           }
+        }
+
+        .editIcon {
+          position: absolute;
+          top: 10px;
+          right: 5px;
+
+          cursor: pointer;
         }
       }
     }
@@ -149,5 +158,33 @@
     color: #757575;
     pointer-events: none;
     user-select: none;
+  }
+}
+
+.formWrapStyle {
+  max-height: 300px;
+  overflow: auto;
+
+  /* 滚动条样式 */
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 10px;
+    background-color: #fff;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+}
+
+.formWrapStyle:hover {
+  &::-webkit-scrollbar-thumb {
+    background-color: #bbbcbe;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #787b7e;
   }
 }
