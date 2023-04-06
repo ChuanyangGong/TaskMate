@@ -353,6 +353,17 @@ ipcMain.handle('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDet
   return taskId;
 });
 
+// 通过 id 删除任务
+ipcMain.handle('dashboard:deleteTaskById', async (_, id: number) => {
+  if (id === -1) {
+    return false;
+  }
+  await TaskRecord.destroy({ where: { id }});
+  // 触发列表刷新
+  dashboardWindow?.webContents.send('dashboard:invokeRefreshTaskList');
+  return true;
+});
+
 export const getDashboardWin = () => {
   return dashboardWindow;
 };

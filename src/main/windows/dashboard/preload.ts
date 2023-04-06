@@ -11,5 +11,6 @@ export default {
   getTaskDetailById: (id: number) => ipcRenderer.invoke('dashboard:getTaskDetailById', id),
   updateOrCreateTask: (recordItem: TaskDetailItemType) => ipcRenderer.invoke('dashboard:updateOrCreateTask', recordItem),
   invokeRefreshTaskList: (callback: any) => ipcRenderer.on('dashboard:invokeRefreshTaskList', callback),
-  clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList')
+  clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList'),
+  deleteTaskById: (id: number) => ipcRenderer.invoke('dashboard:deleteTaskById', id),
 };
