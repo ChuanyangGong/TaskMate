@@ -289,7 +289,6 @@ ipcMain.handle('dashboard:getTaskDetailById', async (_, id: number) => {
 
 // 新建或者更新任务
 ipcMain.handle('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDetailItemType) => {
-  console.log(taskRecord);
   const dbManager = getDBManager();
   let taskId = -1;
   await dbManager?.sequelize.transaction(async (t) => {
@@ -314,15 +313,25 @@ ipcMain.handle('dashboard:updateOrCreateTask', async (event, taskRecord: TaskDet
 
     // 更新时间片
     if (taskRecord?.updateTimeSliceList) {
-      taskItem.setTimeSlices([], { transaction: t });
-      const newTimeSlices = await Promise.all((taskRecord.timeSliceList || []).map(async (item) => {
-        return await TimeSlice.create({
+      // 删除所有该任务的时间片
+      await TimeSlice.destroy({
+        where: {
+          taskId: taskItem?.id,
+        },
+        transaction: t,
+      });
+      // 创建新的时间片
+      const timeSliceList = taskRecord.timeSliceList?.map(item => {
+        return {
+          taskId: taskItem?.id,
           startAt: item.startAt,
           endAt: item.endAt,
-          duration: item.duration
-        }, { transaction: t });
-      }));
-      taskItem.setTimeSlices(newTimeSlices);
+          duration: item.duration,
+        }
+      }
+      );
+      await TimeSlice.bulkCreate(timeSliceList || [], { transaction: t });
+      taskItem.duration = taskRecord?.duration || taskItem.duration;
     }
 
     // 更新标签

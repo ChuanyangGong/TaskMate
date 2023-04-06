@@ -103,7 +103,7 @@ export default function TaskDetail(props: TaskDetailProps) {
       await window.electron.dashboard.updateOrCreateTask({id: selectedItemId, categoryId: id, forceUpdateCategory: true});
       await getTaskDetail(selectedItemId);
     }
-  }, [selectedTaskItem]);
+  }, []);
 
 
   // 显示时长信息的数据
@@ -165,10 +165,54 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   // 编辑任务 time slice
   const [openTimeSliceModal, setOpenTimeSliceModal] = useState(false);
-  const onFinish = (values: any) => {
-    console.log('Received values of form:', values);
-  };
+  const [timeSliceForm] = Form.useForm();
 
+  const onShowEdit = useCallback(() => {
+    let timeSliceList = selectedTaskItem.TimeSlice?.map((item: any) => {
+      if (item.startAt instanceof Date) {
+        return [dayjs(item.startAt), dayjs(item.endAt)];
+      }
+      return undefined;
+    }) || [];
+    if (!Array.isArray(timeSliceList) || timeSliceList.length === 0) {
+      timeSliceList = [undefined];
+    }
+    timeSliceForm.setFieldsValue({
+      timeSlice: timeSliceList,
+    });
+    setOpenTimeSliceModal(true);
+  }, [selectedTaskItem]);
+  const onFinish = useCallback(async () => {
+    timeSliceForm.validateFields().then(async () => {
+      let duration = 0;
+      let startAt = Infinity;
+      let endAt = -Infinity;
+      let timeSliceList = timeSliceForm.getFieldsValue().timeSlice
+        ?.filter((item: any) => Array.isArray(item) && item.length === 2)
+        ?.map((item: any) => {
+          let curDuration = Math.floor((item[1].valueOf() - item[0].valueOf()) / 1000);
+          startAt = Math.min(startAt, item[0].valueOf());
+          endAt = Math.max(endAt, item[1].valueOf());
+          duration += curDuration;
+          return {
+            startAt: item[0].toDate(),
+            endAt: item[1].toDate(),
+            duration: curDuration,
+          }
+        }) || [];
+      await window.electron.dashboard.updateOrCreateTask({
+        id: selectedItemId,
+        updateTimeSliceList: true,
+        timeSliceList,
+        startAt: new Date(startAt),
+        endAt: new Date(endAt),
+        duration
+      });
+      await getTaskDetail(selectedItemId);
+      setOpenTimeSliceModal(false);
+    }).catch((info) => {});
+
+  }, [timeSliceForm, selectedItemId]);
 
   return (
     <div className={styles.detailWrap}>
@@ -217,16 +261,16 @@ export default function TaskDetail(props: TaskDetailProps) {
                   !isTodo && (
                     <div className={styles.timeSliceWrap}>
                       {/* 编辑按钮 */}
-                      <div className={styles.editIcon} onClick={() => setOpenTimeSliceModal(true)}>
+                      <div className={styles.editIcon} onClick={onShowEdit}>
                         <Iconfont iconName='icon-edit' iconColor='#666' size={15}/>
                       </div>
                       <div>总时长：{timeSliceInfo?.duration || "-"}</div>
                       <div>时间范围：{timeSliceInfo?.timeRange?.[0] || "-"} 至 {timeSliceInfo?.timeRange?.[1] || "-"}</div>
                       <div>时间分布：</div>
                       <div className={styles.timeSliceBoxWrap}>
-                        {timeSliceInfo?.timeSliceWeight.map((item) => {
+                        {timeSliceInfo?.timeSliceWeight.map((item, idx) => {
                           return (
-                            <div style={{flexBasis: item[1]}} className={`${styles.timeSliceItem} ${item[0] ? styles.blue : ''}`} />
+                            <div key={idx} style={{flexBasis: item[1]}} className={`${styles.timeSliceItem} ${item[0] ? styles.blue : ''}`} />
                           )
                         })}
                       </div>
@@ -278,6 +322,7 @@ export default function TaskDetail(props: TaskDetailProps) {
       >
         <Form
           name="timeSliceEditor"
+          form={timeSliceForm}
           {...formItemLayoutWithOutLabel}
           className={styles.formWrapStyle}
         >
