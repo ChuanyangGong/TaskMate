@@ -103,7 +103,7 @@ export default function TaskDetail(props: TaskDetailProps) {
       await window.electron.dashboard.updateOrCreateTask({id: selectedItemId, categoryId: id, forceUpdateCategory: true});
       await getTaskDetail(selectedItemId);
     }
-  }, []);
+  }, [selectedItemId]);
 
 
   // 显示时长信息的数据
