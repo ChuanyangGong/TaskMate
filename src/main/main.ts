@@ -13,6 +13,7 @@ import { getConfigManager } from './config/ConfigManager';
 import { initialDBManager } from './database/DatabaseManager';
 import initialCommonHandler from './windows/common';
 import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
+import { createRecorderWindow, getRecorderWindow } from './windows/recorder';
 
 // 初始化项目
 (async () => {
@@ -43,10 +44,12 @@ import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
     .whenReady()
     .then(() => {
       createDashboardWindow();
+      createRecorderWindow();
       app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (getDashboardWin() === null) createDashboardWindow();
+        if (getRecorderWindow() === null) createRecorderWindow();
       });
     })
     .catch(console.log);

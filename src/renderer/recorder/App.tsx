@@ -1,17 +1,29 @@
-import { useCallback } from 'react';
+import { SetStateAction, useCallback, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import '../App.scss';
-
-const Hello = () => {
-  return <div>recorder adas</div>;
-};
+import styles from './App.module.scss';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import dayjs from 'dayjs';
+import Header from './components/header';
+import RecorderHeader from './components/header';
+import RecorderContent from './components/content';
 
 export default function App() {
+  const [isActivate, setIsActivate] = useState(true);
+
+  const [curState, setCurState] = useState();
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <ConfigProvider locale={zhCN}>
+      <div className={styles.framework}>
+        <div className={styles.recorderWrap}>
+          {/* 头部 */}
+          {isActivate && <RecorderHeader />}
+          {/* 内容 */}
+          <RecorderContent />
+        </div>
+      </div>
+    </ConfigProvider>
   );
 }

@@ -1,0 +1,36 @@
+.recorderContentWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+  width: 100%;
+  padding: 0 8px;
+
+  .timerWrap {
+    font-size: 23px;
+    line-height: 23px;
+    font-weight: 700;
+    color: #6B6B6B;
+    font-family: AlibabaPuHuiTi;
+  }
+
+  .startButton {
+    width: 0px;
+    height: 0px;
+    border-top: 9.5px solid transparent;
+    border-bottom: 9.5px solid transparent;
+    border-right: 14px solid rgba(44, 136, 211, 0.9);
+    border-radius: 2px;
+    transform: rotate(180deg);
+    cursor: pointer;
+  }
+
+  .endButton {
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+
+    border-radius: 2px;
+    background: rgba(44, 136, 211, 0.9);
+  }
+}

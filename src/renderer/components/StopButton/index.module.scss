@@ -1,0 +1,15 @@
+.StopButtonWrap {
+  display: flex;
+  width: 14px;
+  height: 15px;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .line {
+    flex: none;
+    background: rgba(44, 136, 211, 0.9);
+    height: 100%;
+    width: 5.2px;
+    border-radius: 2px;
+  }
+}

@@ -1,0 +1,40 @@
+.headerWrap {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 14px;
+  overflow: hidden;
+  opacity: 0;
+
+  .dragArea {
+    height: 14px;
+    flex: auto;
+    -webkit-app-region: drag;
+  }
+
+  .buttonArea {
+    height: 14px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 16px;
+    user-select: none;
+    cursor: pointer;
+    color: #000;
+  }
+
+  .buttonArea:hover {
+    transition: background-color 0.15s;
+    font-weight: 700;
+  }
+
+  .buttonArea:active {
+    transition: background-color 0.05s;
+  }
+}
+
+.headerWrap:hover {
+  opacity: 1;
+  transition: opacity 0.15s;
+}

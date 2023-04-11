@@ -43,7 +43,7 @@ export default function ListItems(props: ListItemsProps) {
               onMouseLeave={() => hasBeenAboved && setEnterItemId(-1)}
             >
               <div className={`${styles.prefixAndSuffix}`}>
-                {hasBeenAboved && <Iconfont iconName='icon-move1' size={12} />}
+                {/* {hasBeenAboved && <Iconfont iconName='icon-move1' size={12} />} */}
               </div>
               <div
                 key={taskInfo.id}
