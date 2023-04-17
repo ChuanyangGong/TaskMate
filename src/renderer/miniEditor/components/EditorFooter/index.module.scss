@@ -1,0 +1,37 @@
+.footerWrap {
+  flex: none;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba(193, 188, 188, 0.3);
+
+  .footerButtonWrap {
+    display: flex;
+    align-items: center;
+    max-width: 150px;
+    height: 23px;
+    padding: 0 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    user-select: none;
+    overflow: hidden;
+
+    .iconStyle {
+      flex: none;
+      margin-right: 3px;
+      margin-bottom: 2px;
+    }
+
+    .textStyle {
+      flex: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      line-height: 20px;
+    }
+  }
+
+  .footerButtonWrap:hover {
+    background-color: #ececec;
+  }
+}

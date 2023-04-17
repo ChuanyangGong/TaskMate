@@ -14,6 +14,7 @@ import { initialDBManager } from './database/DatabaseManager';
 import initialCommonHandler from './windows/common';
 import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
 import { createRecorderWindow, getRecorderWindow } from './windows/recorder';
+import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEditor';
 
 // 初始化项目
 (async () => {
@@ -45,11 +46,13 @@ import { createRecorderWindow, getRecorderWindow } from './windows/recorder';
     .then(() => {
       createDashboardWindow();
       createRecorderWindow();
+      createMiniEditorWindow();
       app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (getDashboardWin() === null) createDashboardWindow();
         if (getRecorderWindow() === null) createRecorderWindow();
+        if (getMiniEditorWindow() === null) createMiniEditorWindow();
       });
     })
     .catch(console.log);

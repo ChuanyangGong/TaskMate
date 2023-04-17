@@ -1,0 +1,26 @@
+.contentWrap {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+
+  .titleWrap {
+    flex: none;
+    display: flex;
+    margin-top: 5px;
+
+    .titleArea {
+      padding-right: 5px;
+      font-weight: 700;
+      font-size: 15.4px;
+      line-height: 18px;
+    }
+  }
+
+  .detailArea {
+    flex: none;
+  }
+
+  .focus {
+    flex: auto;
+  }
+}

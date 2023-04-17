@@ -166,6 +166,23 @@ const configuration: webpack.Configuration = {
       isDevelopment: process.env.NODE_ENV !== 'production',
     }),
 
+    new HtmlWebpackPlugin({
+      filename: path.join('miniEditor.html'),
+      template: path.join(
+        webpackPaths.srcRendererPath,
+        'miniEditor',
+        'index.ejs'
+      ),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      chunks: ['miniEditor'],
+      isDevelopment: process.env.NODE_ENV !== 'production',
+    }),
+
     new webpack.DefinePlugin({
       'process.type': '"renderer"',
     }),

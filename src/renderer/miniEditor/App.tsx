@@ -2,11 +2,11 @@ import { SetStateAction, useCallback, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import '../App.scss';
 import styles from './App.module.scss';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Input } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import dayjs from 'dayjs';
-import RecorderHeader from './components/header';
-import RecorderContent from './components/content';
+import EditorContent from './components/EditorContent';
+import EditorFooter from './components/EditorFooter';
 
 export default function App() {
   const [isActivate, setIsActivate] = useState(true);
@@ -16,11 +16,12 @@ export default function App() {
   return (
     <ConfigProvider locale={zhCN}>
       <div className={styles.framework}>
+        {/* 有一个 4x 的透明边框用来做阴影效果 */}
         <div className={styles.recorderWrap}>
-          {/* 头部 */}
-          {isActivate && <RecorderHeader />}
-          {/* 内容 */}
-          <RecorderContent />
+          <div className={styles.contentWrap}>
+            <EditorContent />
+            <EditorFooter />
+          </div>
         </div>
       </div>
     </ConfigProvider>

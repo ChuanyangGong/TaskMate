@@ -56,6 +56,11 @@ const configuration: webpack.Configuration = {
       'webpack/hot/only-dev-server',
       path.join(webpackPaths.srcRendererPath, 'recorder', 'index.tsx'),
     ],
+    miniEditor: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      path.join(webpackPaths.srcRendererPath, 'miniEditor', 'index.tsx'),
+    ],
   },
 
   output: {
@@ -189,6 +194,25 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       chunks: ['recorder'],
+      env: process.env.NODE_ENV,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+      nodeModules: webpackPaths.appNodeModulesPath,
+    }),
+
+    new HtmlWebpackPlugin({
+      filename: path.join('miniEditor.html'),
+      template: path.join(
+        webpackPaths.srcRendererPath,
+        'miniEditor',
+        'index.ejs'
+      ),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      chunks: ['miniEditor'],
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
