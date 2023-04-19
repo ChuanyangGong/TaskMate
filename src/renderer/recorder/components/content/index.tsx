@@ -11,11 +11,22 @@ import {
 import styles from './index.module.scss';
 import StopButton from 'renderer/components/StopButton';
 import CONST from '../../../const';
+import { TaskDetailItemType } from 'typings/renderer/dashboard/App';
+
+const defaultContentDetail: TaskDetailItemType = {
+  title: '',
+  detail: '',
+  status: 1,
+  categoryId: null,
+  tagIds: [],
+}
 
 interface RecorderContentProps {
 }
 
 export default function RecorderContent(props: RecorderContentProps) {
+  // 内容详情记录
+  const [contentDetail, setContentDetail] = useState<TaskDetailItemType>(defaultContentDetail);
   const [recorderStatus, setRecorderStatus] = useState(CONST.RECORDER_STATE_READY);
   const [timeSlice, setTimeSlice] = useState<[Date, Date | null][]>([]);
   const [totalSeconds, setTotalSeconds] = useState(0);

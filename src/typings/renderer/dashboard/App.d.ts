@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Dayjs } from "dayjs";
+import { Category } from "main/database/models/Category";
+import { Tag } from "main/database/models/Tag";
 
 export interface MenuItem {
   icon: string;
@@ -56,7 +58,9 @@ export interface TaskDetailItemType {
   status?: number | null;
   forceUpdateCategory?: boolean;
   categoryId?: number | null;
+  Category?: Category | null;
   tagIds?: number[] | null;
+  Tags?: Tag[] | null;
   updateTagList?: boolean;
   updateTimeSliceList?: boolean;
   timeSliceList?: TimeSliceItemType[] | null;

@@ -13,7 +13,24 @@ export default function EditorFooter() {
 
   return (
     <div className={styles.footerWrap}>
-
+      {/* 左边的分类 icon button */}
+      <Popover
+        className={styles.footerButtonWrap}
+        arrow={false}
+        placement="topLeft"
+        trigger="click"
+        destroyTooltipOnHide={true}
+        content={
+          <CategorySelector
+            selectedId={selectedTaskItem?.categoryId}
+            onUpdateSelector={onUpdateSelector}
+            style={{ height: 200 }}
+          />
+        }
+      >
+        <Iconfont iconName="icon-move" className={styles.iconStyle}/>
+        <div className={styles.textStyle}>{selectedTaskItem?.Category === null ? '未分类' : selectedTaskItem?.Category.name}</div>
+      </Popover>
     </div>
   )
 }

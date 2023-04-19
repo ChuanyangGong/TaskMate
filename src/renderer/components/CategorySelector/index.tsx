@@ -22,10 +22,11 @@ const defaultCategoryList = [{
 interface CategorySelectorProps {
   selectedId: null | number
   onUpdateSelector: (id: number | null) => Promise<void>,
+  style?: React.CSSProperties,
 }
 
 export default function CategorySelector(props: CategorySelectorProps) {
-  const { selectedId, onUpdateSelector } = props;
+  const { selectedId, onUpdateSelector, style } = props;
 
   // focus input 框
   const inputRef = useRef<any>(null);
@@ -66,7 +67,7 @@ export default function CategorySelector(props: CategorySelectorProps) {
   }, []);
 
   return (
-    <div className={styles.catetorySelectorWrap}>
+    <div className={styles.catetorySelectorWrap} style={style}>
       <Input
         ref={inputRef}
         size="small"

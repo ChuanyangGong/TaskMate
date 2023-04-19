@@ -8,7 +8,7 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import { app } from 'electron';
+import { app, globalShortcut } from 'electron';
 import { getConfigManager } from './config/ConfigManager';
 import { initialDBManager } from './database/DatabaseManager';
 import initialCommonHandler from './windows/common';
@@ -19,8 +19,6 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
 // 初始化项目
 (async () => {
   const cfgManager = getConfigManager();
-
-  console.log(cfgManager.config?.userConfig.databasePath );
 
   await initialDBManager(cfgManager.config?.userConfig.databasePath || '');
 
@@ -44,15 +42,53 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
   app
     .whenReady()
     .then(() => {
-      createDashboardWindow();
+      // createMiniEditorWindow();
       createRecorderWindow();
-      createMiniEditorWindow();
+      // createDashboardWindow();
       app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (getDashboardWin() === null) createDashboardWindow();
+        // if (getDashboardWin() === null) createDashboardWindow();
         if (getRecorderWindow() === null) createRecorderWindow();
-        if (getMiniEditorWindow() === null) createMiniEditorWindow();
+        // if (getMiniEditorWindow() === null) createMiniEditorWindow();
+      });
+    })
+    .then(() => {
+      const { userConfig } = cfgManager.config || {};
+      const { shortcuts } = userConfig || {};
+      const { activateRecorder, minimizeRecorder } = shortcuts || {};
+
+      // 注册全局快捷键 —— 激活、不激活
+      globalShortcut.register(activateRecorder || 'Alt+X', () => {
+        let recorderWin = getRecorderWindow();
+        if (recorderWin === null) {
+          createRecorderWindow();
+          return;
+        }
+
+        // 如果窗口最小化，则恢复
+        if (recorderWin.isMinimized()) {
+          recorderWin.restore();
+        } else if (recorderWin.isFocused()) {
+          recorderWin.blur();
+        } else if (!recorderWin.isFocused()) {
+          recorderWin.focus();
+        }
+      });
+
+      // 注册全局快捷键 —— 最小化、不最小化
+      globalShortcut.register(minimizeRecorder || 'Alt+C', () => {
+        let recorderWin = getRecorderWindow();
+        if (recorderWin === null) {
+          createRecorderWindow();
+          return;
+        }
+
+        if (recorderWin.isMinimized()) {
+          recorderWin.restore();
+        } else {
+          recorderWin.minimize();
+        }
       });
     })
     .catch(console.log);

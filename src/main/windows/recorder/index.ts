@@ -1,6 +1,7 @@
 import { app, BrowserWindow, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
+import { getConfigManager } from '../../config/ConfigManager';
 
 let recorderWindow: BrowserWindow | null = null;
 export const createRecorderWindow = async () => {
@@ -51,6 +52,23 @@ export const createRecorderWindow = async () => {
   recorderWindow.on('closed', () => {
     recorderWindow = null;
   });
+
+  recorderWindow.on('focus', () => {
+    recorderWindow?.setIgnoreMouseEvents(false);
+    recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'focus');
+  });
+
+  recorderWindow.on('blur', () => {
+    recorderWindow?.setIgnoreMouseEvents(true);
+    recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'blur')
+  });
+
+  // 创建快捷键
+  const cfgManager = getConfigManager();
+  const { userConfig } = cfgManager.config || {};
+  const { shortcuts } = userConfig || {};
+  const { startPauseRecorder, stopRecorder } = shortcuts || {};
+
 };
 
 export const getRecorderWindow = () => {

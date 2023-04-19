@@ -2,7 +2,7 @@
   flex: none;
   display: flex;
   align-items: center;
-  border-top: 1px solid rgba(193, 188, 188, 0.3);
+  margin: 3px 5px 0;
 
   .footerButtonWrap {
     display: flex;
@@ -10,6 +10,7 @@
     max-width: 150px;
     height: 23px;
     padding: 0 5px;
+    color: #999;
     cursor: pointer;
     border-radius: 3px;
     user-select: none;
@@ -18,7 +19,6 @@
     .iconStyle {
       flex: none;
       margin-right: 3px;
-      margin-bottom: 2px;
     }
 
     .textStyle {
@@ -33,5 +33,6 @@
 
   .footerButtonWrap:hover {
     background-color: #ececec;
+    color: #333;
   }
 }

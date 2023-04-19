@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import '../App.scss';
 import styles from './App.module.scss';
@@ -9,16 +9,29 @@ import RecorderHeader from './components/header';
 import RecorderContent from './components/content';
 
 export default function App() {
-  const [isActivate, setIsActivate] = useState(true);
-
+  const [isFocus, setIsFocus] = useState(true);
   const [curState, setCurState] = useState();
+
+  // 处理聚焦、失焦事件
+  useEffect(() => {
+    window.electron.recorder.invokeFocusOrBlur((_: any, value: string) => {
+      if (value === 'focus') {
+        setIsFocus(true);
+      } else {
+        setIsFocus(false);
+      }
+    })
+    return () => {
+      window.electron.recorder.clearInvokeFocusOrBlur();
+    }
+  }, [])
 
   return (
     <ConfigProvider locale={zhCN}>
-      <div className={styles.framework}>
+      <div className={`${styles.framework} ${isFocus ? '' : styles.frameworkBlur}`}>
         <div className={styles.recorderWrap}>
           {/* 头部 */}
-          {isActivate && <RecorderHeader />}
+          <RecorderHeader />
           {/* 内容 */}
           <RecorderContent />
         </div>

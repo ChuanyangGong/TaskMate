@@ -63,14 +63,6 @@ export const createDashboardWindow = async () => {
   });
 };
 
-ipcMain.on('openAnotherWindow', async (event, arg) => {
-  try {
-    createRecorderWindow();
-  } catch (e) {
-    console.log({ e });
-  }
-});
-
 // 获取分类 或 标签列表
 ipcMain.handle('dashboard:getFilterListChildren', async () => {
   const searchObj = [Category, Tag];
@@ -213,7 +205,7 @@ ipcMain.handle('dashboard:deleteCategoryOrTagItemByType', async (_, type: string
   if (id === -1) {
     return false;
   }
-  if(type === 'category') {
+  if (type === 'category') {
     // 删除别名
     await CategoryAlias.destroy({ where: { categoryId: id } });
     await Category.destroy({ where: { id }});
