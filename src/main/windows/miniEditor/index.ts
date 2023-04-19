@@ -1,6 +1,7 @@
 import { app, BrowserWindow, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
+import setFocusStatus from '../../focusBlurManager';
 
 let miniEditorWindow: BrowserWindow | null = null;
 export const createMiniEditorWindow = async () => {
@@ -50,6 +51,14 @@ export const createMiniEditorWindow = async () => {
 
   miniEditorWindow.on('closed', () => {
     miniEditorWindow = null;
+  });
+
+  miniEditorWindow.on('focus', () => {
+    setFocusStatus('miniEditor', 'focus');
+  });
+
+  miniEditorWindow.on('blur', () => {
+    setFocusStatus('miniEditor', 'blur');
   });
 };
 

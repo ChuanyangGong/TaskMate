@@ -3,6 +3,7 @@ import path from 'path';
 import { resolveHtmlPath } from '../../util';
 import { getConfigManager } from '../../config/ConfigManager';
 import { debounce } from '../../../renderer/utils';
+import setFocusStatus from '../../focusBlurManager';
 
 let recorderWindow: BrowserWindow | null = null;
 export const createRecorderWindow = async () => {
@@ -55,13 +56,15 @@ export const createRecorderWindow = async () => {
   });
 
   recorderWindow.on('focus', () => {
-    recorderWindow?.setIgnoreMouseEvents(false);
-    recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'focus');
+    // recorderWindow?.setIgnoreMouseEvents(false);
+    // recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'focus');
+    setFocusStatus('recorder', 'focus');
   });
 
   recorderWindow.on('blur', () => {
-    recorderWindow?.setIgnoreMouseEvents(true);
-    recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'blur')
+    // recorderWindow?.setIgnoreMouseEvents(true);
+    // recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'blur')
+    setFocusStatus('recorder', 'blur');
   });
 
   // 创建快捷键

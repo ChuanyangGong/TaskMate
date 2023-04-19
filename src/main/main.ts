@@ -42,7 +42,7 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
   app
     .whenReady()
     .then(() => {
-      // createMiniEditorWindow();
+      createMiniEditorWindow();
       createRecorderWindow();
       // createDashboardWindow();
       app.on('activate', () => {
@@ -50,7 +50,7 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
         // dock icon is clicked and there are no other windows open.
         // if (getDashboardWin() === null) createDashboardWindow();
         if (getRecorderWindow() === null) createRecorderWindow();
-        // if (getMiniEditorWindow() === null) createMiniEditorWindow();
+        if (getMiniEditorWindow() === null) createMiniEditorWindow();
       });
     })
     .then(() => {
@@ -61,33 +61,42 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
       // 注册全局快捷键 —— 激活、不激活
       globalShortcut.register(activateRecorder || 'Alt+X', () => {
         let recorderWin = getRecorderWindow();
-        if (recorderWin === null) {
-          createRecorderWindow();
+        let miniEditorWin = getMiniEditorWindow();
+        if (recorderWin === null || miniEditorWin === null) {
+          recorderWin === null && createRecorderWindow();
+          miniEditorWin === null && createMiniEditorWindow();
           return;
         }
 
         // 如果窗口最小化，则恢复
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
-        } else if (recorderWin.isFocused()) {
+          miniEditorWin.restore();
+        } else if (recorderWin.isFocused() || miniEditorWin.isFocused()) {
           recorderWin.blur();
-        } else if (!recorderWin.isFocused()) {
+          miniEditorWin.blur();
+        } else {
           recorderWin.focus();
+          miniEditorWin.focus();
         }
       });
 
       // 注册全局快捷键 —— 最小化、不最小化
       globalShortcut.register(minimizeRecorder || 'Alt+C', () => {
         let recorderWin = getRecorderWindow();
-        if (recorderWin === null) {
-          createRecorderWindow();
+        let miniEditorWin = getMiniEditorWindow();
+        if (recorderWin === null || miniEditorWin === null) {
+          recorderWin === null && createRecorderWindow();
+          miniEditorWin === null && createMiniEditorWindow();
           return;
         }
 
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
+          miniEditorWin.restore();
         } else {
           recorderWin.minimize();
+          miniEditorWin.minimize();
         }
       });
     })
