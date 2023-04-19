@@ -58,7 +58,7 @@ export default function RecorderContent(props: RecorderContentProps) {
         window.clearInterval(intervalHandler)
     }
     setIntervalHandler(handler)
-}, [intervalHandler]);
+  }, [intervalHandler]);
 
   // 点击开始按钮
   const onClickStart = useCallback(() => {
@@ -96,6 +96,24 @@ export default function RecorderContent(props: RecorderContentProps) {
       setRecorderStatus(CONST.RECORDER_STATE_READY);
     }
   }, [recorderStatus]);
+
+  // 处理快捷键事件
+  useEffect(() => {
+    window.electron.recorder.invokeAccelerator((_: any, action: string) => {
+      if (action === 'startOrPause') {
+        if (recorderStatus === CONST.RECORDER_STATE_RECORDING) {
+          onClickStop();
+        } else {
+          onClickStart();
+        }
+      } else {
+        onClickFinish();
+      }
+    })
+    return () => {
+      window.electron.recorder.clearInvokeAccelerator();
+    }
+  }, [recorderStatus])
 
   return (
     <div className={styles.recorderContentWrap}>

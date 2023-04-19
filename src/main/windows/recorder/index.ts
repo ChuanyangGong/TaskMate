@@ -1,7 +1,8 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
 import { getConfigManager } from '../../config/ConfigManager';
+import { debounce } from '../../../renderer/utils';
 
 let recorderWindow: BrowserWindow | null = null;
 export const createRecorderWindow = async () => {
@@ -69,6 +70,25 @@ export const createRecorderWindow = async () => {
   const { shortcuts } = userConfig || {};
   const { startPauseRecorder, stopRecorder } = shortcuts || {};
 
+  const debounceAccelerator = debounce((action: string) => {
+    recorderWindow?.webContents.send('recoder:invokeAccelerator', action);
+  }, 100, true);
+
+  const menu = new Menu();
+  menu.append(new MenuItem({
+    label: '操作',
+    submenu: [{
+      label: '开始/暂停',
+      accelerator: startPauseRecorder,
+      click: () => debounceAccelerator('startOrPause')
+    },
+    {
+      label: '结束',
+      accelerator: stopRecorder,
+      click: () => debounceAccelerator('stop')
+    }],
+  }))
+  Menu.setApplicationMenu(menu)
 };
 
 export const getRecorderWindow = () => {
