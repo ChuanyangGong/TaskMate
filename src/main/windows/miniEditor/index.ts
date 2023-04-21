@@ -59,7 +59,10 @@ export const createMiniEditorWindow = async () => {
   miniEditorWindow.on('blur', () => {
     setFocusStatus('miniEditor', 'blur');
   });
-  setFocusStatus('miniEditor', 'focus');
+
+  miniEditorWindow.on('focus', () => {
+    setFocusStatus('miniEditor', 'focus');
+  });
 };
 
 export const getMiniEditorWindow = () => {

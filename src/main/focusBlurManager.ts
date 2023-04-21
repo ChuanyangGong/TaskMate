@@ -46,7 +46,7 @@ export function setFocusStatus(winName: 'recorder' | 'miniEditor', status: strin
         let miniEditorWin = getMiniEditorWindow();
         miniEditorWin?.setIgnoreMouseEvents(true);
         miniEditorWin?.webContents.send('miniEditor:invokeFocusOrBlur', 'blur')
-      }, 100);
+      }, 10);
     }
   }
 }

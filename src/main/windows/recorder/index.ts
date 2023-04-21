@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, MenuItem, screen } from 'electron';
+import { app, BrowserWindow, Event, Menu, MenuItem, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
 import { getConfigManager } from '../../config/ConfigManager';
@@ -61,6 +61,10 @@ export const createRecorderWindow = async () => {
     setFocusStatus('recorder', 'blur');
   });
 
+  recorderWindow.on('focus', () => {
+    setFocusStatus('recorder', 'focus');
+  });
+
   // 监听位置移动
   recorderWindow.on('move', () => {
     let { x = 1000, y = 50 } = recorderWindow?.getBounds() || {};
@@ -105,7 +109,6 @@ export const createRecorderWindow = async () => {
     }],
   }))
   Menu.setApplicationMenu(menu)
-  setFocusStatus('recorder', 'focus');
 };
 
 export const getRecorderWindow = () => {

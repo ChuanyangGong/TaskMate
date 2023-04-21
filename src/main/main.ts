@@ -73,13 +73,12 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
           miniEditorWin.restore();
-          setFocusStatus('miniEditor', 'focus');
         } else if (isFocus()) {
-          setFocusStatus('recorder', 'blur');
           setFocusStatus('miniEditor', 'blur');
+          setFocusStatus('recorder', 'blur');
         } else {
-          setFocusStatus('recorder', 'focus');
-          setFocusStatus('miniEditor', 'focus');
+          miniEditorWin.focus();
+          recorderWin.focus();
         }
       });
 
@@ -96,10 +95,7 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
           miniEditorWin.restore();
-          setFocusStatus('miniEditor', 'focus');
         } else {
-          setFocusStatus('recorder', 'blur');
-          setFocusStatus('miniEditor', 'blur');
           recorderWin.minimize();
           miniEditorWin.minimize();
         }
