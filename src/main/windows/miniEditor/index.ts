@@ -1,7 +1,8 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
 import { setFocusStatus } from '../../focusBlurManager';
+import { getRecorderWindow } from '../recorder';
 
 export const miniEditorWidth = 280;
 export const miniEditorHeight = 360;
@@ -64,6 +65,13 @@ export const createMiniEditorWindow = async () => {
     setFocusStatus('miniEditor', 'focus');
   });
 };
+
+ipcMain.on('miniEditor:setRecorderTimeSlice', async (_, timeSlice: [Date, Date][]) => {
+  const recorderWindow = getRecorderWindow();
+  if (recorderWindow) {
+    recorderWindow.webContents.send('recoder:setRecorderStatus', timeSlice);
+  }
+});
 
 export const getMiniEditorWindow = () => {
   return miniEditorWindow;

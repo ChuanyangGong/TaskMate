@@ -5,4 +5,7 @@ export default {
   clearInvokeFocusOrBlur: () => ipcRenderer.removeAllListeners('recoder:invokeFocusOrBlur'),
   invokeAccelerator: (callback: any) => ipcRenderer.on('recoder:invokeAccelerator', callback),
   clearInvokeAccelerator: () => ipcRenderer.removeAllListeners('recoder:invokeAccelerator'),
+  setRecorderStatus: (callback: any) => ipcRenderer.on('recoder:setRecorderStatus', callback),
+  clearSetRecorderStatus: () => ipcRenderer.removeAllListeners('recoder:setRecorderStatus'),
+  handleRecorderFinish: (timeSlice: [Date, Date | null][]) => ipcRenderer.send('recoder:handleRecorderFinish', timeSlice),
 };

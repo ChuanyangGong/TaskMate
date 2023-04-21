@@ -10,7 +10,6 @@ import EditorFooter from './components/EditorFooter';
 
 export default function App() {
   const [isFocus, setIsFocus] = useState(true);
-  const [curState, setCurState] = useState();
 
   // 处理聚焦、失焦事件
   useEffect(() => {
@@ -23,6 +22,19 @@ export default function App() {
     })
     return () => {
       window.electron.miniEditor.clearInvokeFocusOrBlur();
+    }
+  }, [])
+
+  // 注册结束计时事件处理
+  useEffect(() => {
+    window.electron.miniEditor.invokeFinishRecord((_: any, timeSlice: [Date, Date][]) => {
+
+
+
+      window.electron.miniEditor.setRecorderTimeSlice([]);
+    })
+    return () => {
+      window.electron.miniEditor.clearInvokeFinishRecord();
     }
   }, [])
 

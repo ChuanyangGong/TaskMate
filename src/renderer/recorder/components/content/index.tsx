@@ -21,6 +21,32 @@ export default function RecorderContent(props: RecorderContentProps) {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [intervalHandler, setIntervalHandler] = useState(0);
 
+  const calcTotalSeconds = useCallback((timeRecords: [Date, Date | null][]) => {
+    let newTotalSeconds = 0;
+    timeRecords.forEach((timeRecord) => {
+      let [startTime, endTime] = timeRecord;
+      if (endTime === null) {
+        endTime = new Date();
+      }
+      newTotalSeconds += (endTime.getTime() - startTime.getTime()) / 1000;
+    });
+    return newTotalSeconds;
+  }, []);
+
+  // 注册计时器修改函数
+  useEffect(() => {
+    window.electron.recorder.setRecorderStatus((_: any, timeSlice: [Date, Date][]) => {
+      setRecorderStatus(
+        timeSlice.length > 0 ? CONST.RECORDER_STATE_STOP : CONST.RECORDER_STATE_READY
+      );
+      setTimeSlice(timeSlice);
+      setTotalSeconds(calcTotalSeconds(timeSlice));
+    })
+    return () => {
+      window.electron.recorder.clearSetRecorderStatus();
+    }
+  }, [])
+
   // 通过当前时间计算小时字符数
   const timeString = useMemo(() => {
     let hour = Math.floor(totalSeconds / 3600);
@@ -33,15 +59,7 @@ export default function RecorderContent(props: RecorderContentProps) {
   // 启动定时任务
   const startInterval = useCallback((timeRecords: [Date, Date | null][]) => {
     const handler = window.setInterval(() => {
-      let newTotalSeconds = 0;
-      timeRecords.forEach((timeRecord) => {
-        let [startTime, endTime] = timeRecord;
-        if (endTime === null) {
-          endTime = new Date();
-        }
-        newTotalSeconds += (endTime.getTime() - startTime.getTime()) / 1000;
-      });
-      setTotalSeconds(newTotalSeconds);
+      setTotalSeconds(calcTotalSeconds(timeRecords));
     }, 90)
     if (intervalHandler !== null) {
         window.clearInterval(intervalHandler)
@@ -79,12 +97,12 @@ export default function RecorderContent(props: RecorderContentProps) {
   const onClickFinish = useCallback(() => {
     if (recorderStatus === CONST.RECORDER_STATE_STOP) {
       // todo: 保存数据
-
-      setTimeSlice([]);
-      setTotalSeconds(0);
-      setRecorderStatus(CONST.RECORDER_STATE_READY);
+      window.electron.recorder.handleRecorderFinish(timeSlice);
+      // setTimeSlice([]);
+      // setTotalSeconds(0);
+      // setRecorderStatus(CONST.RECORDER_STATE_READY);
     }
-  }, [recorderStatus]);
+  }, [recorderStatus, timeSlice]);
 
   // 处理快捷键事件
   useEffect(() => {
@@ -102,7 +120,7 @@ export default function RecorderContent(props: RecorderContentProps) {
     return () => {
       window.electron.recorder.clearInvokeAccelerator();
     }
-  }, [recorderStatus])
+  }, [recorderStatus, onClickFinish, onClickStart, onClickStop])
 
   return (
     <div className={styles.recorderContentWrap}>
