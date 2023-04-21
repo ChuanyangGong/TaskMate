@@ -15,6 +15,7 @@ import initialCommonHandler from './windows/common';
 import { createDashboardWindow, getDashboardWin } from './windows/dashboard';
 import { createRecorderWindow, getRecorderWindow } from './windows/recorder';
 import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEditor';
+import { isFocus, setFocusStatus } from './focusBlurManager';
 
 // 初始化项目
 (async () => {
@@ -72,12 +73,13 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
           miniEditorWin.restore();
-        } else if (recorderWin.isFocused() || miniEditorWin.isFocused()) {
-          recorderWin.blur();
-          miniEditorWin.blur();
+          setFocusStatus('miniEditor', 'focus');
+        } else if (isFocus()) {
+          setFocusStatus('recorder', 'blur');
+          setFocusStatus('miniEditor', 'blur');
         } else {
-          recorderWin.focus();
-          miniEditorWin.focus();
+          setFocusStatus('recorder', 'focus');
+          setFocusStatus('miniEditor', 'focus');
         }
       });
 
@@ -94,7 +96,10 @@ import { createMiniEditorWindow, getMiniEditorWindow } from './windows/miniEdito
         if (recorderWin.isMinimized()) {
           recorderWin.restore();
           miniEditorWin.restore();
+          setFocusStatus('miniEditor', 'focus');
         } else {
+          setFocusStatus('recorder', 'blur');
+          setFocusStatus('miniEditor', 'blur');
           recorderWin.minimize();
           miniEditorWin.minimize();
         }

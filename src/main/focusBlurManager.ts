@@ -10,9 +10,12 @@ let indexMap = {
 
 let timeeoutHandler: null | NodeJS.Timeout | undefined = null;
 
-export default function setFocusStatus(winName: 'recorder' | 'miniEditor', status: string) {
-  focusStatus[indexMap[winName]] = status;
+export function isFocus() {
+  return focusStatus.includes('focus');
+}
 
+export function setFocusStatus(winName: 'recorder' | 'miniEditor', status: string) {
+  focusStatus[indexMap[winName]] = status;
   if (status === 'focus') {
     if (timeeoutHandler) {
       clearTimeout(timeeoutHandler);

@@ -1,7 +1,10 @@
 import { app, BrowserWindow, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../../util';
-import setFocusStatus from '../../focusBlurManager';
+import { setFocusStatus } from '../../focusBlurManager';
+
+export const miniEditorWidth = 280;
+export const miniEditorHeight = 360;
 
 let miniEditorWindow: BrowserWindow | null = null;
 export const createMiniEditorWindow = async () => {
@@ -15,20 +18,20 @@ export const createMiniEditorWindow = async () => {
 
   let priScreenInfo = screen.getPrimaryDisplay()
   let screenWidth = priScreenInfo.size.width;
-  let miniEditorWidth = 280;
-  let miniEditorHeight = 360;
 
   miniEditorWindow = new BrowserWindow({
     show: false,
     width: miniEditorWidth,
     height: miniEditorHeight,
     x: screenWidth - miniEditorWidth - 30,
-    y: 136,
+    y: 134,
     resizable: false,
     icon: getAssetPath('icon.png'),
     transparent: true,
     frame: false,
     alwaysOnTop: true,
+    // 设置置顶窗口的层级
+    // https://www.electronjs.org/docs/api/browser-window#winsetalwaysontopflag-level
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -53,13 +56,10 @@ export const createMiniEditorWindow = async () => {
     miniEditorWindow = null;
   });
 
-  miniEditorWindow.on('focus', () => {
-    setFocusStatus('miniEditor', 'focus');
-  });
-
   miniEditorWindow.on('blur', () => {
     setFocusStatus('miniEditor', 'blur');
   });
+  setFocusStatus('miniEditor', 'focus');
 };
 
 export const getMiniEditorWindow = () => {

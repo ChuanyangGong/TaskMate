@@ -3,7 +3,11 @@ import path from 'path';
 import { resolveHtmlPath } from '../../util';
 import { getConfigManager } from '../../config/ConfigManager';
 import { debounce } from '../../../renderer/utils';
-import setFocusStatus from '../../focusBlurManager';
+import { setFocusStatus } from '../../focusBlurManager';
+import { getMiniEditorWindow, miniEditorHeight, miniEditorWidth } from '../miniEditor';
+
+let recorderWidth = 170;
+let recorderHeight = 54;
 
 let recorderWindow: BrowserWindow | null = null;
 export const createRecorderWindow = async () => {
@@ -17,8 +21,6 @@ export const createRecorderWindow = async () => {
 
   let priScreenInfo = screen.getPrimaryDisplay()
   let screenWidth = priScreenInfo.size.width;
-  let recorderWidth = 170;
-  let recorderHeight = 54;
 
   recorderWindow = new BrowserWindow({
     show: false,
@@ -55,16 +57,27 @@ export const createRecorderWindow = async () => {
     recorderWindow = null;
   });
 
-  recorderWindow.on('focus', () => {
-    // recorderWindow?.setIgnoreMouseEvents(false);
-    // recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'focus');
-    setFocusStatus('recorder', 'focus');
+  recorderWindow.on('blur', () => {
+    setFocusStatus('recorder', 'blur');
   });
 
-  recorderWindow.on('blur', () => {
-    // recorderWindow?.setIgnoreMouseEvents(true);
-    // recorderWindow?.webContents.send('recoder:invokeFocusOrBlur', 'blur')
-    setFocusStatus('recorder', 'blur');
+  // 监听位置移动
+  recorderWindow.on('move', () => {
+    let { x = 1000, y = 50 } = recorderWindow?.getBounds() || {};
+    const miniEditorWindow = getMiniEditorWindow();
+    if (miniEditorWindow) {
+      // 计算miniEditor的位置
+      let priScreenInfo = screen.getPrimaryDisplay()
+      let screenHeight = priScreenInfo.size.height;
+
+      let miniEditorX = x;
+      let miniEditorY = y + recorderHeight + 10;
+      if (miniEditorY + miniEditorHeight > screenHeight) {
+        miniEditorY = y - miniEditorHeight - 10;
+      }
+      miniEditorWindow.setPosition(miniEditorX, miniEditorY);
+      miniEditorWindow.setSize(miniEditorWidth, miniEditorHeight);
+    }
   });
 
   // 创建快捷键
@@ -92,6 +105,7 @@ export const createRecorderWindow = async () => {
     }],
   }))
   Menu.setApplicationMenu(menu)
+  setFocusStatus('recorder', 'focus');
 };
 
 export const getRecorderWindow = () => {
