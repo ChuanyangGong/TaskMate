@@ -11,6 +11,13 @@ let recorderHeight = 54;
 
 let recorderWindow: BrowserWindow | null = null;
 export const createRecorderWindow = async () => {
+  // 检查时候存在 miniEditorWindow 窗口
+  if (recorderWindow !== null) {
+    recorderWindow.restore();
+    recorderWindow.focus();
+    return;
+  }
+
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../../../assets');

@@ -54,52 +54,5 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
         if (getMiniEditorWindow() === null) createMiniEditorWindow();
       });
     })
-    .then(() => {
-      const { userConfig } = cfgManager.config || {};
-      const { shortcuts } = userConfig || {};
-      const { activateRecorder, minimizeRecorder } = shortcuts || {};
-
-      // 注册全局快捷键 —— 激活、不激活
-      globalShortcut.register(activateRecorder || 'Alt+X', () => {
-        let recorderWin = getRecorderWindow();
-        let miniEditorWin = getMiniEditorWindow();
-        if (recorderWin === null || miniEditorWin === null) {
-          recorderWin === null && createRecorderWindow();
-          miniEditorWin === null && createMiniEditorWindow();
-          return;
-        }
-
-        // 如果窗口最小化，则恢复
-        if (recorderWin.isMinimized()) {
-          recorderWin.restore();
-          miniEditorWin.restore();
-        } else if (isFocus()) {
-          setFocusStatus('miniEditor', 'blur');
-          setFocusStatus('recorder', 'blur');
-        } else {
-          recorderWin.focus();
-          miniEditorWin.focus();
-        }
-      });
-
-      // 注册全局快捷键 —— 最小化、不最小化
-      globalShortcut.register(minimizeRecorder || 'Alt+C', () => {
-        let recorderWin = getRecorderWindow();
-        let miniEditorWin = getMiniEditorWindow();
-        if (recorderWin === null || miniEditorWin === null) {
-          recorderWin === null && createRecorderWindow();
-          miniEditorWin === null && createMiniEditorWindow();
-          return;
-        }
-
-        if (recorderWin.isMinimized()) {
-          recorderWin.restore();
-          miniEditorWin.restore();
-        } else {
-          recorderWin.minimize();
-          miniEditorWin.minimize();
-        }
-      });
-    })
     .catch(console.log);
 })();

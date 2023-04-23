@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, nativeImage, shell } from 'electron';
 import path from 'path';
 import { Op, Sequelize } from 'sequelize';
 import { Category } from '../../database/models/Category';
@@ -21,6 +21,13 @@ function isCategory(type: string) {
 }
 
 export const createDashboardWindow = async () => {
+  // 检查时候存在 dashboard 窗口
+  if (dashboardWindow !== null) {
+    dashboardWindow.restore();
+    dashboardWindow.focus();
+    return;
+  }
+
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../../../assets');
@@ -42,7 +49,7 @@ export const createDashboardWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../../../.erb/dll/preload.js'),
-    },
+    }
   });
 
   dashboardWindow.loadURL(resolveHtmlPath('dashboard.html'));

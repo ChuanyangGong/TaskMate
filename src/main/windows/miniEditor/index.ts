@@ -9,6 +9,13 @@ export const miniEditorHeight = 360;
 
 let miniEditorWindow: BrowserWindow | null = null;
 export const createMiniEditorWindow = async () => {
+  // 检查时候存在 miniEditorWindow 窗口
+  if (miniEditorWindow !== null) {
+    miniEditorWindow.restore();
+    miniEditorWindow.focus();
+    return;
+  }
+
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../../../assets');
