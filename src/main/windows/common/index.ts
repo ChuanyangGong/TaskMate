@@ -78,16 +78,19 @@ export default async function initialCommonHandler() {
   });
 
   // 设置 tray
-  const appIcon = nativeImage.createFromPath(path.join(__dirname, './assets/icon.png'))
+  // Q: 我的 tray 没有图标是咋回事
+  // A: 你的图标路径不对，或者你的图标不是 png 格式
+  const appIcon = nativeImage.createFromPath(path.join(__dirname, '../../../../assets/icon.png'))
   const tray = new Tray(appIcon)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '退出',
       role: 'quit'
     },
-  ])
+  ]);
   let handler: null | number = null;
   let doubleClick = true;
+
   tray.on('double-click', () => {
     if (handler != null) {
       clearTimeout(handler);
@@ -98,7 +101,8 @@ export default async function initialCommonHandler() {
       doubleClick = false;
     }, 100);
     createDashboardWindow();
-  })
+  });
+
   tray.on('click', () => {
     if (handler != null) {
       clearTimeout(handler);
@@ -110,6 +114,6 @@ export default async function initialCommonHandler() {
         createMiniEditorWindow();
       }
     }, 100);
-  })
-  tray.setContextMenu(contextMenu)
+  });
+  tray.setContextMenu(contextMenu);
 }
