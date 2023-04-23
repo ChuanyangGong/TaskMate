@@ -39,6 +39,7 @@ export default function ListItems(props: ListItemsProps) {
           const hasBeenAboved = taskInfo.id === enterItemId;
           return (
             <div className={styles.taskItemWrap}
+              key={taskInfo.id}
               onMouseEnter={() => setEnterItemId(taskInfo.id)}
               onMouseLeave={() => hasBeenAboved && setEnterItemId(-1)}
             >

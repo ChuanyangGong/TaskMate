@@ -40,7 +40,7 @@ export interface selectedSubIdType {
 }
 
 export interface TimeSliceItemType {
-  id: number | null;
+  id?: number | null;
   startAt: Date | null;
   endAt: Date | null;
   duration: number | null;

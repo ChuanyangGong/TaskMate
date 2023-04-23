@@ -86,6 +86,15 @@ ipcMain.handle('dashboard:getFilterListChildren', async () => {
   };
 });
 
+// 获取分类详情
+ipcMain.handle('dashboard:getCategoryDetail', async (event, categoryId: number | null) => {
+  if (categoryId === null) {
+    return null;
+  }
+  const category = (await Category.findByPk(categoryId))?.toJSON();
+  return category;
+});
+
 // 获取某一个分类或标签的详情
 ipcMain.handle('dashboard:getItemDetailByType', async (event, type: string, id: number) => {
   if (isCategory(type)) {

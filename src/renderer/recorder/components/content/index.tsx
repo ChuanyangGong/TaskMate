@@ -96,11 +96,8 @@ export default function RecorderContent(props: RecorderContentProps) {
   // 点击结束按钮
   const onClickFinish = useCallback(() => {
     if (recorderStatus === CONST.RECORDER_STATE_STOP) {
-      // todo: 保存数据
+      // 保存数据
       window.electron.recorder.handleRecorderFinish(timeSlice);
-      // setTimeSlice([]);
-      // setTotalSeconds(0);
-      // setRecorderStatus(CONST.RECORDER_STATE_READY);
     }
   }, [recorderStatus, timeSlice]);
 

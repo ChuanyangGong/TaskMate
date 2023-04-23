@@ -33,6 +33,7 @@ export const createRecorderWindow = async () => {
     transparent: true,
     frame: false,
     alwaysOnTop: true,
+    skipTaskbar: true,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

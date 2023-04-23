@@ -31,8 +31,7 @@ export const createMiniEditorWindow = async () => {
     transparent: true,
     frame: false,
     alwaysOnTop: true,
-    // 设置置顶窗口的层级
-    // https://www.electronjs.org/docs/api/browser-window#winsetalwaysontopflag-level
+    skipTaskbar: true,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

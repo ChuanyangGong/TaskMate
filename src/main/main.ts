@@ -25,7 +25,7 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
 
   // 初始化主线程环境
   if (cfgManager.config?.isDev) {
-    require('electron-debug')();
+    // require('electron-debug')();
   }
 
   // 初始化事件处理
@@ -43,9 +43,9 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
   app
     .whenReady()
     .then(() => {
+      createDashboardWindow();
       createMiniEditorWindow();
       createRecorderWindow();
-      // createDashboardWindow();
       app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
@@ -77,8 +77,8 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
           setFocusStatus('miniEditor', 'blur');
           setFocusStatus('recorder', 'blur');
         } else {
-          miniEditorWin.focus();
           recorderWin.focus();
+          miniEditorWin.focus();
         }
       });
 

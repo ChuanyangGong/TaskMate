@@ -13,4 +13,5 @@ export default {
   invokeRefreshTaskList: (callback: any) => ipcRenderer.on('dashboard:invokeRefreshTaskList', callback),
   clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList'),
   deleteTaskById: (id: number) => ipcRenderer.invoke('dashboard:deleteTaskById', id),
+  getCategoryDetail: (categoryId: number | null) => ipcRenderer.invoke('dashboard:getCategoryDetail', categoryId),
 };
