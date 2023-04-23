@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, Tray, globalShortcut, ipcMain, nativeImage } from 'electron';
+import { BrowserWindow, Menu, Tray, app, globalShortcut, ipcMain, nativeImage } from 'electron';
 import { getConfigManager } from '../../config/ConfigManager';
 import { createRecorderWindow, getRecorderWindow } from '../recorder';
 import { createMiniEditorWindow, getMiniEditorWindow } from '../miniEditor';
@@ -80,7 +80,7 @@ export default async function initialCommonHandler() {
   // 设置 tray
   // Q: 我的 tray 没有图标是咋回事
   // A: 你的图标路径不对，或者你的图标不是 png 格式
-  const appIcon = nativeImage.createFromPath(path.join(__dirname, '../../../../assets/icon.png'))
+  const appIcon = nativeImage.createFromPath(path.join(__dirname, app.isPackaged ? '' : '../' , '../../../assets/icon.png'))
   const tray = new Tray(appIcon)
   const contextMenu = Menu.buildFromTemplate([
     {

@@ -32,6 +32,9 @@ const configuration: webpack.Configuration = {
     recorder: [
       path.join(webpackPaths.srcRendererPath, 'recorder', 'index.tsx'),
     ],
+    miniEditor: [
+      path.join(webpackPaths.srcRendererPath, 'miniEditor', 'index.tsx'),
+    ],
   },
 
   output: {
