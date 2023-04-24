@@ -33,11 +33,11 @@ export default function CategorySelector(props: CategorySelectorProps) {
   const [selectorList, setSelectorList] = useState<any[]>([]);
   const getTotalList = useCallback(async () => {
     const res = await window.electron.dashboard.getFilterListChildren();
-    const selectorItems = res.category.map((item: any) => {
+    const selectorItems = res?.category?.map((item: any) => {
       return {
-        CategoryAliases: item.CategoryAliases,
-        id: item.id,
-        name: item.name
+        CategoryAliases: item?.CategoryAliases || [],
+        id: item?.id,
+        name: item?.name,
       }
     });
     setSelectorList([...defaultCategoryList, ...selectorItems]);

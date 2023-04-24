@@ -80,6 +80,7 @@ ipcMain.handle('dashboard:getFilterListChildren', async () => {
       include: [
         {
           model: obj === Category ? CategoryAlias : TagAlias,
+          as: obj === Category ? 'CategoryAliases' : 'TagAliases',
           attributes: ['name'],
         },
       ],
@@ -234,8 +235,8 @@ ipcMain.handle('dashboard:deleteCategoryOrTagItemByType', async (_, type: string
 
 // 根据过滤条件获取任务列表数据
 ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamType) => {
-  const categoryInclude: any = { model: Category };
-  const tagInclude: any = { model: Tag };
+  const categoryInclude: any = { model: Category, as: 'Category' };
+  const tagInclude: any = { model: Tag, as: 'Tag' };
   const whereStatement: any = { status: filterParam.taskStatus, [Op.and]: []};
 
   // 填充 keyword 过滤条件
@@ -286,9 +287,9 @@ ipcMain.handle('dashboard:getTaskListData', async (_, filterParam: FilterParamTy
 ipcMain.handle('dashboard:getTaskDetailById', async (_, id: number) => {
   const task = await TaskRecord.findByPk(id, {
     include: [
-      { model: Category },
-      { model: Tag },
-      { model: TimeSlice },
+      { model: Category, as: 'Category' },
+      { model: Tag, as: 'Tag' },
+      { model: TimeSlice, as: 'TimeSlice' },
     ]
   });
   const taskRes = task?.toJSON();

@@ -18,22 +18,24 @@ export default async function initModels(sequelize: Sequelize) {
   // 建立关系
   Category.hasMany(CategoryAlias, {
     foreignKey: 'categoryId',
+    as: 'CategoryAliases'
   });
   CategoryAlias.belongsTo(Category);
 
   Tag.hasMany(TagAlias, {
     foreignKey: 'tagId',
+    as: 'TagAliases'
   });
   TagAlias.belongsTo(Tag);
 
   Category.hasMany(TaskRecord, {
     foreignKey: 'categoryId',
   });
-  TaskRecord.belongsTo(Category, { foreignKey: 'categoryId' });
+  TaskRecord.belongsTo(Category, { foreignKey: 'categoryId', as: 'Category' });
 
-  TaskRecord.belongsToMany(Tag, { through: 'TaskRecord_Tag'});
-  Tag.belongsToMany(TaskRecord, { through: 'TaskRecord_Tag'});
+  TaskRecord.belongsToMany(Tag, { through: 'TaskRecord_Tag', as: 'Tag' });
+  Tag.belongsToMany(TaskRecord, { through: 'TaskRecord_Tag' });
 
   TimeSlice.belongsTo(TaskRecord, { foreignKey: 'taskId' });
-  TaskRecord.hasMany(TimeSlice, { foreignKey: 'taskId' });
+  TaskRecord.hasMany(TimeSlice, { foreignKey: 'taskId', as: 'TimeSlice' });
 }

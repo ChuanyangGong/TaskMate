@@ -76,11 +76,13 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   // 根据任务详情设置表单值
   useEffect(() => {
-    form.setFieldsValue({
-      ...selectedTaskItem,
-      planStartAt: selectedTaskItem?.planStartAt ? dayjs(selectedTaskItem.planStartAt) : null,
-    });
-    titleRef.current?.focus();
+    if (selectedTaskItem) {
+      form.setFieldsValue({
+        ...selectedTaskItem,
+        planStartAt: selectedTaskItem?.planStartAt ? dayjs(selectedTaskItem.planStartAt) : null,
+      });
+      titleRef.current?.focus();
+    }
   }, [selectedTaskItem])
 
   // 获取任务详情
@@ -94,7 +96,7 @@ export default function TaskDetail(props: TaskDetailProps) {
   }, []);
 
   useEffect(() => {
-    getTaskDetail(selectedItemId);
+    getTaskDetail?.(selectedItemId);
   }, [selectedItemId]);
 
   // 更新任务分类
@@ -108,21 +110,21 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   // 显示时长信息的数据
   const timeSliceInfo = useMemo(() => {
-    if (selectedTaskItem === null || selectedTaskItem.duration === null) {
+    if (selectedTaskItem === null || selectedTaskItem?.duration === null) {
       return null;
     }
 
     const info: infoType = {
       duration: '',
       timeRange: [
-        convertDateToString(selectedTaskItem.startAt, "YYYY-MM-DD HH:mm"),
-        convertDateToString(selectedTaskItem.endAt, "YYYY-MM-DD HH:mm")
+        convertDateToString(selectedTaskItem?.startAt, "YYYY-MM-DD HH:mm"),
+        convertDateToString(selectedTaskItem?.endAt, "YYYY-MM-DD HH:mm")
       ],
       timeSliceWeight: []
     };
 
     // 计算总时长
-    let totalSeconds = selectedTaskItem.duration;
+    let totalSeconds = selectedTaskItem?.duration;
     let timeDetailList = [];
     let hours = Math.floor(totalSeconds / (60 * 60));
     totalSeconds = totalSeconds % (60 * 60);
@@ -136,7 +138,7 @@ export default function TaskDetail(props: TaskDetailProps) {
 
     // 生成时间分布
     const timeMap = new Map();
-    selectedTaskItem.TimeSlice?.forEach((sliceItem: any) => {
+    selectedTaskItem?.TimeSlice?.forEach((sliceItem: any) => {
       let startAt = sliceItem.startAt.valueOf();
       let endAt = sliceItem.endAt.valueOf();
       if (!timeMap.has(startAt)) {
@@ -168,7 +170,7 @@ export default function TaskDetail(props: TaskDetailProps) {
   const [timeSliceForm] = Form.useForm();
 
   const onShowEdit = useCallback(() => {
-    let timeSliceList = selectedTaskItem.TimeSlice?.map((item: any) => {
+    let timeSliceList = selectedTaskItem?.TimeSlice?.map((item: any) => {
       if (item.startAt instanceof Date) {
         return [dayjs(item.startAt), dayjs(item.endAt)];
       }
@@ -289,7 +291,7 @@ export default function TaskDetail(props: TaskDetailProps) {
                 destroyTooltipOnHide={true}
                 content={
                   <CategorySelector
-                    selectedId={selectedTaskItem.categoryId}
+                    selectedId={selectedTaskItem?.categoryId}
                     onUpdateSelector={onUpdateSelector}
                   />
                 }
