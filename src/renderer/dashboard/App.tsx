@@ -21,20 +21,20 @@ const buttonList: MenuItem[] = [
     show: true,
     taskStatus: 1,
   },
-  {
-    icon: 'todo',
-    iconColor: 'rgba(59, 138, 191, 0.9)',
-    title: '待做清单',
-    show: true,
-    taskStatus: 0,
-  },
-  {
-    icon: 'data06',
-    iconColor: '#E47215',
-    title: '数据报表',
-    show: true,
-    taskStatus: 1,
-  },
+  // {
+  //   icon: 'todo',
+  //   iconColor: 'rgba(59, 138, 191, 0.9)',
+  //   title: '待做清单',
+  //   show: true,
+  //   taskStatus: 0,
+  // },
+  // {
+  //   icon: 'data06',
+  //   iconColor: '#E47215',
+  //   title: '数据报表',
+  //   show: true,
+  //   taskStatus: 1,
+  // },
 ];
 
 const defultSelectionList: DefaultItemType[] = [

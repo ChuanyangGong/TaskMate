@@ -27,10 +27,13 @@ export default function ListItems(props: ListItemsProps) {
       cancelText: '取消',
       onOk: async () => {
         await window.electron.dashboard.deleteTaskById(id);
+        if (id === selectedItemId) {
+          setSelectedItemId(-1);
+        }
         form.destroy();
       }
     });
-  }, []);
+  }, [selectedItemId]);
 
   return (
     <div className={styles.ListCommonFilterWrap}>
