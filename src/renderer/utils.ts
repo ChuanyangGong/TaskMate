@@ -89,3 +89,13 @@ export function convertDateToString(input: Date | null | undefined, format = "YY
   }
   return dayjs(input).format(format);
 }
+
+export function secondToHourAndMinuteString(seconds: number) {
+  const hour = Math.floor(seconds / 3600);
+  const minute = Math.floor((seconds % 3600) / 60);
+  if (hour > 0) {
+    return `${hour}H ${timeAligh(minute)}M`;
+  } else {
+    return `${minute}M`;
+  }
+}

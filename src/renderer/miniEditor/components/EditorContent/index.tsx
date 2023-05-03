@@ -56,5 +56,4 @@ export default function EditorContent(props: EditorContentProps) {
       <div className={styles.focus} onClick={() => inputRef.current!.focus({cursor: 'end'}) } />
     </div>
   )
-
 }

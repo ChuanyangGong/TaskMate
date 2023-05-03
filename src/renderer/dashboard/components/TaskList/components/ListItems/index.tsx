@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'reac
 import Iconfont from 'renderer/components/Iconfont';
 import styles from './index.module.scss';
 import emptyPic from '../../../../../../../assets/images/empty_tasks.png';
+import { secondToHourAndMinuteString } from 'renderer/utils';
 
 interface ListItemsProps {
   taskListItems: any[];
@@ -55,6 +56,8 @@ export default function ListItems(props: ListItemsProps) {
                 onClick={() => setSelectedItemId(taskInfo.id)}
               >
                 <div className={styles.title}>{taskInfo.title}</div>
+                <div className={styles.detail}>{taskInfo.detail}</div>
+                <div className={styles.duration}>{secondToHourAndMinuteString(taskInfo.duration)}</div>
               </div>
               <div className={styles.prefixAndSuffix} onClick={() => onHandleDeleteTask(taskInfo.id)}>
                 {hasBeenAboved && <Iconfont iconName='icon-ellipsis' size={12} />}
