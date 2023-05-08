@@ -62,18 +62,81 @@
 
 <div style="width: 100%"><image style="margin: 0 auto; width:800px;" src="./.erb/img/dashboard_guide.png" /></div>
 
+- 任务分类选择支持关键字搜索，且可以用自定义的别名进行搜索。
+
 ## 下载链接
 - windows 版：
   - 阿里云盘：https://www.aliyundrive.com/s/x3yztqKwGxW
   - 百度网盘：https://pan.baidu.com/s/1tywsetGG7bSfVNNf9yuN0Q?pwd=t5sb
 
+
+## 项目最新动态
+目前本项目只实现了最基本的功能，还有许多新功能还在开发中，欢迎大家提出宝贵的意见和建议。
+
+**目前状态**：1.1.0 版本开发中
+**上线时间**：待定
+### 1.1.0 版本计划
+#### 新功能
+- [ ] 允许用户继续进行已经结束的任务
+- [ ] Todo List 列表
+- [ ] 常用日期范围快捷选项
+- [ ] Reacorder 快捷键进行分类选择
+
+### 待定计划
+#### 新功能
+- [ ] 统计页面
+- [ ] 归档功能
+- [ ] 标签功能
+
 ## 开发者指南
 ### 技术栈
-- 客户端开发框架：[Electron](https://www.electronjs.org/)
-  - 使用了 [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) 来作为 Electron 项目的脚手架，里面集成了 React、Webpack、Typescripe 等。
-- 前端框架：[React](https://react.dev/)
-- 前端 UI 框架：[Antd](https://ant.design/)
-- 数据存储：[SQLite](https://github.com/sqlite/sqlite)、sqlite3
-  - ORM：[sequelize](https://sequelize.org/)
-  - 数据迁移：[umzug](https://github.com/sequelize/umzug)
-- 原型绘制：[MasterGo](https://mastergo.com/)
+- [Electron](https://www.electronjs.org/)：基于 Chromium 和 Node.js 的跨平台桌面应用开发框架。并使用了 [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) 来作为项目基础，里面集成了 React、Webpack、Typescripe 等。
+- [React](https://react.dev/)：前端框架。
+- [Antd](https://ant.design/)：前端 UI 组件库。
+- [SQLite](https://github.com/sqlite/sqlite)、[sequelize](https://sequelize.org/)、[umzug](https://github.com/sequelize/umzug)：使用 SQLite 来进行数据的存储，使用 sequelize 来进行数据库的操作，使用 umzug 来进行数据库的迁移。
+- [MasterGo](https://mastergo.com/)：绘制项目原型。
+
+### 项目启动步骤
+
+首先，克隆本项目并切换到项目根目录
+
+```
+// 从 gitee 上克隆项目
+git clone https://github.com/ChuanyangGong/TaskMate.git
+// 或者从 github 上克隆项目
+git clone https://gitee.com/g847714121/TaskMate.git
+```
+
+安装依赖
+
+```
+npm install
+```
+
+启动项目
+
+```
+npm run start
+```
+
+### 项目打包发布
+
+打包发布
+
+```
+npm run package
+```
+
+在 ```release\build``` 文件夹里就会有打包发布的结果。
+
+### 主要升级
+- 使用了 electron-react-boilerplate 作为脚手架，而非之前直接基于原生 electron 进行开发。多界面热更新、Webpack 等功能都是脚手架自带的，免除了很多对于开发环境的配置工作。
+- 使用 TypeScript 进行项目的开发，增加了代码的可读性和可维护性。
+- 使用了 umzug 和 sequelize 来进行数据库的迁移和管理，使得用户进行软件升级变的更简单。
+- 将数据与程序分离，将数据存储在用户目录下，而非之前的程序目录下，这样用户升级软件时不会丢失数据。
+- 增加了分类功能，实现了在 React-every-moment 项目中未实现的编辑功能。
+- 代码模块化更加清晰，每个界面都有自己独立的文件夹。
+
+
+## 联系方式
+Email: cy_gong@foxmail.com
