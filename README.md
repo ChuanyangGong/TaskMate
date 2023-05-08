@@ -9,7 +9,7 @@
 ### 功能简介
 该工具主要包括三部分，一个是计时器，一个是数据看板，最后一个是托盘。计时器用于记录当前正在进行的任务，数据看板用于查看、编辑、搜索已经记录的任务，或添加新的记录，托盘用于快速打开计时器或数据看板。
 
-#### 计时器
+1. 计时器
 计时器存在三种状态，第一种状态是**激活状态**，在这个状态可以通过快捷键**开始、暂停、结束计时**，还可以**编辑任务记录的标题、详情和分类（未来还会有标签）**。
 
 <div style="width: 100%"><image style="margin: 0 auto; width: 300px;" src="./.erb/img/recorder_activate.png" /></div>
@@ -22,12 +22,12 @@
 
 **最最重要的是，对于计时器的操作可以通过快捷键进行。包括：激活、不激活计时器，隐藏、显示计时器，开始计时、暂停计时、结束计时，这些最常使用的功能。目前记录分类的设定仍需使用鼠标，未来也将脱离对鼠标的依赖。**
 
-#### 数据看板
+2. 数据看板
 
 数据看板用于查看、编辑、添加、删除任务记录。并且支持按分类、按关键词、按日期进行筛选。对于任务的编辑也是随改随存的。在任务详情部分还以友好的方式显示的完成该任务的时间分布情况，清晰的展现任务是分部分完成的还是一次性完成的。
 <div style="width: 100%"><image style="margin: 0 auto; width: 800px;" src="./.erb/img/dashboard.png" /></div>
 
-#### 托盘
+3. 托盘
 
 最后一部分是托盘，可以通过托盘打开数据看板（双击应用图标），打开计时器（单击应用图标），或退出程序。
 <div style="width: 100%"><image style="margin: 0 auto; width: 200px;" src="./.erb/img/tray.png" /></div>
@@ -67,3 +67,13 @@
   - 阿里云盘：https://www.aliyundrive.com/s/x3yztqKwGxW
   - 百度网盘：https://pan.baidu.com/s/1tywsetGG7bSfVNNf9yuN0Q?pwd=t5sb
 
+## 开发者指南
+### 技术栈
+- 客户端开发框架：[Electron](https://www.electronjs.org/)
+  - 使用了 [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) 来作为 Electron 项目的脚手架，里面集成了 React、Webpack、Typescripe 等。
+- 前端框架：[React](https://react.dev/)
+- 前端 UI 框架：[Antd](https://ant.design/)
+- 数据存储：[SQLite](https://github.com/sqlite/sqlite)、sqlite3
+  - ORM：[sequelize](https://sequelize.org/)
+  - 数据迁移：[umzug](https://github.com/sequelize/umzug)
+- 原型绘制：[MasterGo](https://mastergo.com/)
