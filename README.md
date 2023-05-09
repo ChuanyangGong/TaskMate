@@ -39,7 +39,7 @@
 - **Alt + X**：未选中状态  <==> 选中状态。快捷选中/不选中转换，该快捷键为全局快捷键，在使用其他程序的时候也有效，用于快速更改计时器状态。
 
 > Demo: 使用 Alt + X 唤醒计时器，并直接编写标题和描述，然后设置任务分类。 
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/计时器快捷键唤起.mp4"></div>
+![计时器快捷键唤起](https://github.com/ChuanyangGong/TaskMate/assets/41765158/a2e4e151-14da-4634-b7cb-d81212911e5e)
 
 - **Alt + C**：缩小 <==> 恢复。快捷缩小计时器，或者恢复并激活计时器，该快捷键也是全局快捷键。
 - **Ctrl + D**：开始 <==> 暂停。快捷开始计时或暂停计时。该快捷键只有在计时器被激活（选中）时才有效。
@@ -48,10 +48,10 @@
 
 > Demo: 先使用 Ctrl + D 暂停任务，再使用 Ctrl + F 结束任务，此时该任务会被添加到记录中。
 
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/快捷键结束.mp4" ></div>
+![快捷键结束](https://github.com/ChuanyangGong/TaskMate/assets/41765158/d541c30b-d3a2-4d83-a52a-dc56f2d371d4)
 
 - 未激活状态下，鼠标无法点击计时器，鼠标的点击事件会穿透到下层的应用上。
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/鼠标穿透.mp4" ></div>
+![鼠标穿透](https://github.com/ChuanyangGong/TaskMate/assets/41765158/a0a0fab1-6454-413f-bf8d-dde295d2fc2d)
 
 2. 托盘操作介绍
 
@@ -62,15 +62,15 @@
 3. 数据看板操作介绍
 
 - 鼠标移动到分类上会有一个 +，可以创建新的分类，还可以为分类创建别名，便于搜索。
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/创建新分类.mp4" ></div>
+![创建新分类](https://github.com/ChuanyangGong/TaskMate/assets/41765158/5565cb39-73b4-4618-8aaf-13332fdc4e57)
 
 - 数据面板右上方有一个 + 号，可以添加一个任务记录，默认会往当前显示的分类内添加。
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/创建新任务.mp4" ></div>
+![创建新任务](https://github.com/ChuanyangGong/TaskMate/assets/41765158/443157ab-cffc-4cc1-be7c-207023d3ea08)
 
 - 鼠标移动到任务记录上，最右边会显示 ...，目前点击该图标可以删除任务记录
 
 - 任务记录详情部分可以修改完成该任务所占用的时间。
-<div style="width: 100%"><video style="margin: 0 auto; width: 500px;" autoplay="autoplay" controls="controls" src="./.erb/videos/编辑时间.mp4" ></div>
+![编辑时间](https://github.com/ChuanyangGong/TaskMate/assets/41765158/eaa3bf43-f668-492a-a10f-79028011a4fd)
 
 - 任务分类选择支持关键字搜索，且可以用自定义的别名进行搜索。
 
