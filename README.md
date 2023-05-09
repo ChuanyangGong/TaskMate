@@ -52,6 +52,7 @@
 ![快捷键结束](https://github.com/ChuanyangGong/TaskMate/assets/41765158/d541c30b-d3a2-4d83-a52a-dc56f2d371d4)
 
 - 未激活状态下，鼠标无法点击计时器，鼠标的点击事件会穿透到下层的应用上。
+
 ![鼠标穿透](https://github.com/ChuanyangGong/TaskMate/assets/41765158/a0a0fab1-6454-413f-bf8d-dde295d2fc2d)
 
 2. 托盘操作介绍
@@ -63,14 +64,17 @@
 3. 数据看板操作介绍
 
 - 鼠标移动到分类上会有一个 +，可以创建新的分类，还可以为分类创建别名，便于搜索。
+
 ![创建新分类](https://github.com/ChuanyangGong/TaskMate/assets/41765158/5565cb39-73b4-4618-8aaf-13332fdc4e57)
 
 - 数据面板右上方有一个 + 号，可以添加一个任务记录，默认会往当前显示的分类内添加。
+
 ![创建新任务](https://github.com/ChuanyangGong/TaskMate/assets/41765158/443157ab-cffc-4cc1-be7c-207023d3ea08)
 
 - 鼠标移动到任务记录上，最右边会显示 ...，目前点击该图标可以删除任务记录
 
 - 任务记录详情部分可以修改完成该任务所占用的时间。
+
 ![编辑时间](https://github.com/ChuanyangGong/TaskMate/assets/41765158/eaa3bf43-f668-492a-a10f-79028011a4fd)
 
 - 任务分类选择支持关键字搜索，且可以用自定义的别名进行搜索。
