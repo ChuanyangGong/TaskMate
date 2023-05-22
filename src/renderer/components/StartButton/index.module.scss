@@ -1,0 +1,10 @@
+.startButton {
+  width: 0px;
+  height: 0px;
+  border-top: 9.5px solid transparent;
+  border-bottom: 9.5px solid transparent;
+  border-right: 14px solid rgba(44, 136, 211, 0.9);
+  border-radius: 2px;
+  transform: rotate(180deg);
+  cursor: pointer;
+}
