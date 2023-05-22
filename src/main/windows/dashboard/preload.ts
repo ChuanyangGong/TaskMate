@@ -14,4 +14,8 @@ export default {
   clearInvokeRefreshTaskList: () => ipcRenderer.removeAllListeners('dashboard:invokeRefreshTaskList'),
   deleteTaskById: (id: number) => ipcRenderer.invoke('dashboard:deleteTaskById', id),
   getCategoryDetail: (categoryId: number | null) => ipcRenderer.invoke('dashboard:getCategoryDetail', categoryId),
+  setContinueTask: (taskId: number) => ipcRenderer.invoke('dashboard:setContinueTask', taskId),
+  handleSendMessage: (message: string, type: string) => ipcRenderer.invoke('dashboard:handleSendMessage', message, type),
+  invokeSendMessage: (callback: any) => ipcRenderer.on('dashboard:invokeSendMessage', callback),
+  clearInvokeSendMessage: () => ipcRenderer.removeAllListeners('dashboard:invokeSendMessage'),
 };

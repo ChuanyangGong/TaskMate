@@ -25,7 +25,7 @@ import { isFocus, setFocusStatus } from './focusBlurManager';
 
   // 初始化主线程环境
   if (cfgManager.config?.isDev) {
-    // require('electron-debug')();
+    require('electron-debug')();
   }
 
   // 初始化事件处理

@@ -12,6 +12,7 @@ import styles from './index.module.scss';
 import StopButton from 'renderer/components/StopButton';
 import CONST from '../../../const';
 import { TaskDetailItemType } from 'typings/renderer/dashboard/App';
+import { TaskRecord } from 'main/database/models/TaskRecord';
 interface RecorderContentProps {
 }
 
@@ -118,6 +119,46 @@ export default function RecorderContent(props: RecorderContentProps) {
       window.electron.recorder.clearInvokeAccelerator();
     }
   }, [recorderStatus, onClickFinish, onClickStart, onClickStop])
+
+  // 曲线救国在 invokeContinueTask 里 onClickStart
+  const [clickStartTime, setClickStartTime] = useState(false);
+  useEffect(() => {
+    if (clickStartTime) {
+      onClickStart();
+      setClickStartTime(false);
+    }
+  }, [clickStartTime, onClickStart])
+
+  // 处理继续任务事件
+  useEffect(() => {
+    window.electron.recorder.invokeContinueTask((_: any, task: any) => {
+      if (recorderStatus === CONST.RECORDER_STATE_READY) {
+        if (Array.isArray(task.TimeSlice)) {
+          let newTimeSlice = task.TimeSlice.map((timeSliceItem: any) => {
+            return [timeSliceItem.startAt, timeSliceItem?.endAt || null];
+          })
+          setTimeSlice(newTimeSlice);
+          setTotalSeconds(calcTotalSeconds(newTimeSlice));
+          setRecorderStatus(CONST.RECORDER_STATE_STOP);
+          window.electron.miniEditor.invokeSetTaskInfo({
+            id: task.id,
+            title: task.title,
+            detail: task.detail,
+            categoryId: task.categoryId,
+            Category: task.Category,
+            forceUpdateCategory: false,
+            tagIds: Array.isArray(task.Tags) ? task.Tags.map((tag: any) => tag.id) : [],
+          });
+          setClickStartTime(true);
+        }
+      } else {
+        window.electron.dashboard.handleSendMessage('请先结束当前任务', 'error');
+      }
+    })
+    return () => {
+      window.electron.recorder.clearInvokeContinueTask();
+    }
+  }, [recorderStatus, setTimeSlice, clickStartTime])
 
   return (
     <div className={styles.recorderContentWrap}>

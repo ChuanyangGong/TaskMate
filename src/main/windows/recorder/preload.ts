@@ -8,4 +8,6 @@ export default {
   setRecorderStatus: (callback: any) => ipcRenderer.on('recoder:setRecorderStatus', callback),
   clearSetRecorderStatus: () => ipcRenderer.removeAllListeners('recoder:setRecorderStatus'),
   handleRecorderFinish: (timeSlice: [Date, Date | null][]) => ipcRenderer.send('recoder:handleRecorderFinish', timeSlice),
+  invokeContinueTask: (callback: any) => ipcRenderer.on('recoder:invokeContinueTask', callback),
+  clearInvokeContinueTask: () => ipcRenderer.removeAllListeners('recoder:invokeContinueTask'),
 };

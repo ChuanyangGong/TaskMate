@@ -79,6 +79,17 @@ ipcMain.on('miniEditor:setRecorderTimeSlice', async (_, timeSlice: [Date, Date][
   }
 });
 
+ipcMain.on('miniEditor:invokeContinueTask', async () => {
+  const recorderWindow = getRecorderWindow();
+  if (recorderWindow) {
+    recorderWindow.webContents.send('recoder:invokeContinueTask');
+  }
+});
+
+ipcMain.on('miniEditor:invokeSetTaskInfo', async (_, taskInfo: any) => {
+  miniEditorWindow?.webContents.send('miniEditor:setTaskInfo', taskInfo);
+});
+
 export const getMiniEditorWindow = () => {
   return miniEditorWindow;
 };

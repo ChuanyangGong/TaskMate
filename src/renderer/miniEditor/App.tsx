@@ -82,6 +82,16 @@ export default function App() {
     }
   }, [taskInfo])
 
+  // 注册修改任务信息事件处理
+  useEffect(() => {
+    window.electron.miniEditor.setTaskInfo(async (_: any, task: TaskDetailItemType) => {
+      setTaskInfo(task);
+    })
+    return () => {
+      window.electron.miniEditor.clearSetTaskInfo();
+    }
+  }, []);
+
   return (
     <ConfigProvider locale={zhCN}>
       <div className={`${styles.framework} ${isFocus ? '' : styles.frameworkBlur}`}>

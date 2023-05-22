@@ -13,7 +13,7 @@ import {
 import { FilterParamType } from 'typings/renderer/dashboard/App';
 import styles from './index.module.scss';
 import emptyPic from '../../../../../assets/images/empty_detail.png';
-import { Button, DatePicker, Form, Input, InputRef, Modal, Popover, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, InputRef, Modal, Popover, TimePicker, message } from 'antd';
 import { convertDateToString, debounce, throttle, timeAligh } from '../../../utils';
 import Iconfont from 'renderer/components/Iconfont';
 import CategorySelector from 'renderer/components/CategorySelector';
@@ -22,6 +22,7 @@ interface TaskDetailProps {
   filterParam: FilterParamType;
   hasTasks: boolean;
   selectedItemId: number;
+  refreshTaskInfo: boolean;
 }
 
 interface infoType {
@@ -50,7 +51,7 @@ const formItemLayoutWithOutLabel = {
 };
 
 export default function TaskDetail(props: TaskDetailProps) {
-  const { filterParam, hasTasks, selectedItemId } = props;
+  const { filterParam, hasTasks, selectedItemId, refreshTaskInfo } = props;
   const [form] = Form.useForm();
 
   const inputRef = useRef<InputRef>(null);
@@ -97,7 +98,7 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   useEffect(() => {
     getTaskDetail?.(selectedItemId);
-  }, [selectedItemId]);
+  }, [selectedItemId, refreshTaskInfo]);
 
   // 更新任务分类
   const onUpdateSelector = useCallback(async (id: number | null) => {
@@ -125,7 +126,6 @@ export default function TaskDetail(props: TaskDetailProps) {
 
     // 计算总时长
     let totalSeconds = selectedTaskItem?.duration;
-    let timeDetailList = [];
     let hours = Math.floor(totalSeconds / (60 * 60));
     totalSeconds = totalSeconds % (60 * 60);
     let minutes = Math.floor(totalSeconds / (60));
@@ -216,6 +216,13 @@ export default function TaskDetail(props: TaskDetailProps) {
 
   }, [timeSliceForm, selectedItemId]);
 
+  // 继续做任务
+  const handleContinueTask = useCallback(async () => {
+    if (selectedItemId) {
+      window.electron.dashboard.setContinueTask(selectedItemId);
+    }
+  }, [selectedItemId]);
+
   return (
     <div className={styles.detailWrap}>
       {
@@ -243,8 +250,8 @@ export default function TaskDetail(props: TaskDetailProps) {
                       autoSize
                     />
                   </Form.Item>
-                  <div className={styles.startButton}>
-
+                  <div className={styles.startButtonWrap}>
+                    <div className={styles.startButton} onClick={handleContinueTask}/>
                   </div>
                 </div>
                 {/* 描述 */}

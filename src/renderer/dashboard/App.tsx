@@ -1,4 +1,4 @@
-import { Button, ConfigProvider } from 'antd';
+import { Button, ConfigProvider, message } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DefaultItemType, FilterParamType, MenuItem, selectedSubIdType, TaskDetailItemType } from 'typings/renderer/dashboard/App';
 import '../App.scss';
@@ -150,15 +150,39 @@ export default function App() {
     doGetTaskListData();
   }, [doGetTaskListData]);
 
+  // 显示信息
+  useEffect(() => {
+    window.electron.dashboard.invokeSendMessage(async (_: any, msg: string, type: string) => {
+      switch (type) {
+        case 'success':
+          message.success(msg);
+          break;
+        case 'error':
+          message.error(msg);
+          break;
+        case 'warning':
+          message.warning(msg);
+          break;
+        default:
+          message.info(msg);
+      }
+    })
+    return () => {
+      window.electron.dashboard.clearInvokeSendMessage();
+    }
+  }, []);
+
   // 刷新表单
+  const [refreshTaskDetail, setRefreshTaskDetail] = useState(false);
   useEffect(() => {
       window.electron.dashboard.invokeRefreshTaskList(() => {
         doGetTaskListData(false);
+        setRefreshTaskDetail(!refreshTaskDetail);
       })
       return () => {
           window.electron.dashboard.clearInvokeRefreshTaskList()
       }
-  }, [doGetTaskListData])
+  }, [doGetTaskListData, refreshTaskDetail])
 
   // 添加新任务
   const onClickAddTask = useCallback(async () => {
@@ -233,6 +257,7 @@ export default function App() {
               filterParam={filterParam}
               selectedItemId={selectedItemId}
               hasTasks={taskListItems.length > 0}
+              refreshTaskInfo={refreshTaskDetail}
             />
           </div>
         </div>

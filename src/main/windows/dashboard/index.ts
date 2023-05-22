@@ -4,7 +4,7 @@ import { Op, Sequelize } from 'sequelize';
 import { Category } from '../../database/models/Category';
 import { resolveHtmlPath } from '../../util';
 import MenuBuilder from '../../menu';
-import { createRecorderWindow } from '../recorder';
+import { createRecorderWindow, getRecorderWindow } from '../recorder';
 import { FilterItemFormDataType } from 'typings/renderer/dashboard/components/TaskMenu';
 import { CategoryAlias } from '../../database/models/CategoryAlias';
 import { Tag } from '../../database/models/Tag';
@@ -13,6 +13,7 @@ import { FilterParamType, TaskDetailItemType } from 'typings/renderer/dashboard/
 import { TaskRecord } from '../../database/models/TaskRecord';
 import { getDBManager } from '../../database/DatabaseManager';
 import { TimeSlice } from '../../database/models/TimeSlice';
+import { getMiniEditorWindow } from '../miniEditor';
 
 let dashboardWindow: BrowserWindow | null = null;
 
@@ -371,6 +372,25 @@ ipcMain.handle('dashboard:deleteTaskById', async (_, id: number) => {
   // 触发列表刷新
   dashboardWindow?.webContents.send('dashboard:invokeRefreshTaskList');
   return true;
+});
+
+ipcMain.handle('dashboard:setContinueTask', async (_, id: number) => {
+  if (id !== -1) {
+    const task = await TaskRecord.findByPk(id, {
+      include: [
+        { model: Category, as: 'Category' },
+        { model: Tag, as: 'Tag' },
+        { model: TimeSlice, as: 'TimeSlice' },
+      ]
+    });
+    const taskRes = task?.toJSON();
+    let recorder = getRecorderWindow();
+    recorder?.webContents.send('recoder:invokeContinueTask', taskRes);
+  }
+});
+
+ipcMain.handle('dashboard:handleSendMessage', async (_, message: string, type: string) => {
+  dashboardWindow?.webContents.send('dashboard:invokeSendMessage', message, type);
 });
 
 export const getDashboardWin = () => {
