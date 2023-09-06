@@ -4,7 +4,7 @@
 
 哈喽，我是 Chuanyang，这是一个**时间记录小工具**的项目。由于我本人经常使用电脑进行工作和学习，并且需要定期总结、汇报自己一段时间内的工作内容、时长以及进度（例如组会汇报一周的工作、Work from home 时自己一天实际工作了多长时间），因此非常想要一个工具能够只使用键盘进行操作，就可以**快速的记录自己正在干的事情、什么时候开始的、什么时候结束的以及花了多少时间**，以便于在需要的时候可以查看到自己的工作记录。
 
-该项目为原 Record Every Moment 项目的重构版，项目地址：https://github.com/ChuanyangGong/Record_every_moment。 该工具虽然有些简陋，但是满足了我最主要的需求，自发布以后一直陪伴着我至今。 新版更名为 TaskMate，借鉴了嘀嗒清单和 Todo 清单的界面，大大提升了美观程度，并使用了新的技术，可以说是跨越式的升级，欢迎大家来使用 ^.^。
+该项目为原 Record Every Moment 项目的重构版，项目地址：![https://github.com/ChuanyangGong/Record_every_moment](https://github.com/ChuanyangGong/Record_every_moment)。 该工具虽然有些简陋，但是满足了我最主要的需求，自发布以后一直陪伴着我至今。 新版更名为 TaskMate，借鉴了嘀嗒清单和 Todo 清单的界面，大大提升了美观程度，并使用了新的技术，可以说是跨越式的升级，欢迎大家来使用 ^.^。
 
 ## 功能介绍及使用教程
 
